@@ -1,0 +1,87 @@
+:root {
+    --bg-color: #333333;
+    --text: #fff;
+    --secondary-text: #333333;
+    --main: #0498c9;
+    --secondary: #fff;
+    --tertiary: #fff;
+  }
+  /* Potential dark/light themes later */
+  /* :root.light {
+    --bg-color: #333333;
+    --text: #fff;
+    --secondary-text: #333333;
+    --main: #0498c9;
+    --secondary: #fff;
+    --tertiary: #fff;
+  }
+  :root.dark {
+    --bg-color: #191414;
+    --text: #fff;
+    --main: #1DB954;
+    --secondary: #9E9E9E;
+    --tertiary: #FFF;
+  } */
+
+p {
+    width: 75%;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Box */
+.box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.box-small {
+    width: 25%;
+}
+.box-full {
+    width: 100%;
+}
+.box-nocenter {
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.box-vertical {
+    flex-direction: column;
+}
+
+/* Card */
+.card {
+    display: flex;
+    height: 200px;
+    width: 75%;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--secondary);
+    padding: 1em;
+    margin: 1em;
+    text-align: center;
+    border-radius: 8px;
+}
+.card-full-width {
+    width: 100%;
+}
+.card-header {
+    display: flex;
+    width: 60%;
+    align-content: center;
+    justify-content: center;
+    padding: 0px 2em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid var(--main);
+  }
+
+.pad-medium {
+    padding: 3em;
+}
+
+#filtersPanel {
+    border: 1px solid black;
+}

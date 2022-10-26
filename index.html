@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Jean's Recipe Book</title>
+
+        <link rel="stylesheet" href="./styles/index.css" />
+    </head>
+    <body>
+        <!-- Intro -->
+        <div class="box box-full">
+            <!-- Box to hold text. Looks better when it isn't one line each, so cap it out at 957px -->
+            <div class="box box-vertical" style="max-width: 957px;">
+                <h1>Jean's Recipe Book</h1>
+                <p>
+                    Welcome to Jean's recipe book! A website inspired by the classic binder my mom kept
+                    of recipes our family loved. This website is a tribute to her and everything she contributed
+                    to the Carr family.
+                </p>
+                <p>
+                    This recipe was made to be easy to use and helpful for everyone. If you have any issues/suggestions, 
+                    please email me at <a href="mailto:jeffrey.carr98@gmail.com">jeffrey.carr98@gmail.com</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Main area. Has 3 columns: Filters | Recipes | Favorites -->
+        <div class="box box-full box-nocenter">
+            <!-- Filters -->
+            <div class="box box-small box-vertical pad-medium">
+                <h1>Filters</h1>
+
+                <div class="card card-full-width" id="filtersPanel">
+                    <div class="card-header">
+                        Filters List
+                    </div>
+
+                    <div class="card-body">
+                        <div class="box box-nocenter">
+                            <input type="checkbox" id="appetizer" name="appetizer" value="Appetizer" />
+                            <label for="appetizer"> Appetizer</label>
+                        </div>
+                        <div class="box box-nocenter">
+                            <input type="checkbox" id="baked" name="baked" value="Baked" />
+                            <label for="baked"> Baked Goods</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Recipes -->
+            <div class="box box-full box-vertical pad-medium" style="background: green;">
+                <h1>Recipes</h1>
+            </div>
+            <!-- Favorites -->
+            <div class="box box-small box-vertical pad-medium">
+                <h1>Favorites</h1>
+            </div>
+        </div>
+    </body>
+</html>
