@@ -8,7 +8,7 @@ async function load() {
 
 /* Categories */
 async function loadCategories() {
-  let data = await fetch(`https://jeans-recipe-book.herokuapp.com/api/getCategories`)
+  let data = await fetch(`https://recipe-book-backend.onrender.com/api/getCategories`)
   let json = JSON.parse(await data.text());
 
   // Convert json to map
@@ -107,7 +107,7 @@ function createCategoryCheckbox(category) {
 
 /* Recipes */
 async function loadRecipes() {
-  let data = await fetch(`https://jeans-recipe-book.herokuapp.com/api/get`);
+  let data = await fetch(`https://recipe-book-backend.onrender.com/api/get`);
   let json = JSON.parse(await data.text());
 
   json.forEach((item) => {

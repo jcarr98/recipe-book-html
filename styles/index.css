@@ -31,6 +31,7 @@
   }
 
 body {
+  margin: 0px;
   font-family: "Dosis", sans-serif;
   font-size: 1.2em;
 }
@@ -286,9 +287,13 @@ input[type="checkbox"]:hover {
 }
 
 .intro {
+  max-width: 957px;
+}
+.intro h1 {
   font-family: "Bad Script", serif;
-  font-size: 2.5em;
+  font-size: 4em;
   font-weight: bold;
+  margin-bottom: 0px;
 }
 
 .pad-medium {
