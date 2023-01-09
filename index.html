@@ -33,7 +33,7 @@
           </div>
         </a>
         <div class="dropdown-content" id="apps-dropdown-container">
-          <a href="#">Main Site</a>
+          <a href="https://www.jeffreycarr.dev/">Main Site</a>
           <a href="https://recipe.jeffreycarr.dev">Recipe Book</a>
           <a href="https://bingo.jeffreycarr.dev">Bingo Creator</a>
         </div>
@@ -44,7 +44,7 @@
   <!-- Intro -->
   <div class="box box-full">
     <!-- Box to hold text. Looks better when it isn't one line each, so cap it out at 957px -->
-    <div class="box box-vertical intro" style="max-width: 957px;">
+    <div class="box box-vertical intro">
       <h1>Jean's Recipe Book</h1>
       <p>
         Welcome to Jean's recipe book! A website inspired by the binder my mom kept
@@ -59,37 +59,28 @@
   </div>
 
   <!-- Main area. Has 3 columns: Filters | Recipes | Favorites -->
-  <div class="box box-full box-nocenter">
-    <!-- Filters -->
-    <div class="box box-small box-vertical pad-medium">
-      <h1>Filters</h1>
-      <div class="card" id="filtersPanel">
-        <!-- <div class="card-header">
-          <h3>Filter by Category</h3>
-        </div> -->
-
-        <div class="card-body box-vertical" id="categoriesContainer">
-          Loading Categories...
-        </div>
-      </div>
+  <div class="box box-full box-vertical box-nocenter">
+    <!-- Search bar and filters -->
+    <div class="box box-full">
+      <input type="text" />
+      <button class="btn">Search</button>
     </div>
-    <!-- Recipes -->
-    <div class="box box-full box-vertical pad-medium">
-      <h1>All Recipes</h1>
 
-      <div class="box box-full" id="recipesContainer">
+    <!-- Recipes -->
+    <div class="box box-full box-vertical box-nocenter">
+      <div class="box box-full box-vertical" id="new-recipesContainer">
         Loading Recipes...
       </div>
     </div>
     <!-- Favorites -->
     <!-- Idea: Two separate panels for favorites and menu. Make them collapsible and allow the menu to be printed -->
-    <div class="box box-small box-vertical pad-medium">
+    <!-- <div class="box box-small box-vertical pad-medium">
       <h1>Favorites</h1>
 
       <div class="box box-full" id="favoritesContainer">
         Loading Favorites...
       </div>
-    </div>
+    </div> -->
   </div>
 
   <script src="./js/index.js" type="text/javascript"></script>

@@ -1,10 +1,10 @@
 :root {
   --bg-color: #fff;
   --text: #333;
-  --secondary-text: #333333;
+  --secondary-text: #fff;
   --main: #0498c9;
-  --secondary: #333333;
-  --tertiary: #fff;
+  --secondary: #333;
+  --tertiary: #333;
 }
 
 /* Potential dark/light themes later */
@@ -24,25 +24,45 @@
     --tertiary: #FFF;
   } */
 
-  /* For input labels */
-  .form-control {
-    line-height: 1.1;
-    padding: 0.1em 0.4em;
-  }
-
 body {
   margin: 0px;
   font-family: "Dosis", sans-serif;
   font-size: 1.2em;
 }
 
-a:hover {
+.btn:hover {
+  /* background: var(--tertiary, darkgray); */
   cursor: pointer;
+  box-shadow: -2px 2.5px var(--tertiary, darkgray);
+  transform: translate(1px, -1.5px);
+}
+.btn:active {
+  box-shadow: 0px 0px;
+  transform: translate(0px, 0px);
 }
 
-p {
-  width: 75%;
-  text-align: center;
+.btn-plain {
+  border: 1px solid var(--secondary, lightgray);
+  box-shadow: 0px 0px;
+}
+.btn-plain:hover {
+  box-shadow: 0px 0px;
+  transform: translate(0px, 0px);
+}
+
+.btn:disabled {
+  color: gray;
+  background: lightgray;
+  border: 1px solid darkgray;
+  box-shadow: 0px 0px;
+  pointer-events: none;
+}
+
+.btn-small {
+  width: 75px;
+  height: 25px;
+  font-size: 0.6em;
+  font-weight: bold;
 }
 
 ul {
@@ -109,7 +129,6 @@ ul {
   border: 1px solid var(--secondary, lightgray);
   border-radius: 8px;
   box-shadow: -1px 2px var(--tertiary, darkgray);
-  text-decoration: none;
 }
 
 .btn-secondary {
@@ -119,10 +138,7 @@ ul {
 }
 
 .btn:hover {
-  /* background: var(--tertiary, darkgray); */
   cursor: pointer;
-  box-shadow: -2px 2.5px var(--tertiary, darkgray);
-  transform: translate(1px, -1.5px);
 }
 .btn:active {
   box-shadow: 0px 0px;
@@ -295,9 +311,30 @@ input[type="checkbox"]:hover {
   font-weight: bold;
   margin-bottom: 0px;
 }
+.intro p {
+  width: 75%;
+  text-align: center;
+}
 
 .pad-medium {
   padding: 3em;
+}
+
+.recipe {
+  margin: 1em;
+  padding: 1em;
+  text-align: left;
+  min-width: 150px;
+  max-width: 500px;
+  box-shadow: -3px 3px 5px gray;
+  border: 1px solid black;
+}
+.recipe-title {
+  padding-bottom: 1em;
+}
+.recipe-title h1 {
+  padding: 0px;
+  margin: 0px;
 }
 
 .tag {
@@ -326,4 +363,8 @@ input[type="checkbox"]:hover {
   grid-template-columns: repeat(auto-fill, minmax(max(350px, 400px), 1fr));
   gap: 1em;
   justify-items: center;
+}
+
+#new-recipesContainer {
+  align-items: flex-start;
 }
