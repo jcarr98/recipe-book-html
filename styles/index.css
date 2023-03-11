@@ -1,370 +1,208 @@
+/* Define color variables for themeing in the future */
 :root {
-  --bg-color: #fff;
-  --text: #333;
-  --secondary-text: #fff;
-  --main: #0498c9;
-  --secondary: #333;
-  --tertiary: #333;
+    --primary: #8ECAE6;
+    --secondary: #219EBC;
+    --tertiary: #023047;
+    --alternate: #FFB703;
+    --alternate2: #FB8500;
+    --font: #023047;
 }
-
-/* Potential dark/light themes later */
-/* :root.light {
-    --bg-color: #333333;
-    --text: #fff;
-    --secondary-text: #333333;
-    --main: #0498c9;
-    --secondary: #fff;
-    --tertiary: #fff;
-  }
-  :root.dark {
-    --bg-color: #191414;
-    --text: #fff;
-    --main: #1DB954;
-    --secondary: #9E9E9E;
-    --tertiary: #FFF;
-  } */
 
 body {
-  margin: 0px;
-  font-family: "Dosis", sans-serif;
-  font-size: 1.2em;
+    margin: 0;
+    color: var(--font, black);
+    font-family: Dosis, sans-serif;
 }
 
-.btn:hover {
-  /* background: var(--tertiary, darkgray); */
-  cursor: pointer;
-  box-shadow: -2px 2.5px var(--tertiary, darkgray);
-  transform: translate(1px, -1.5px);
-}
-.btn:active {
-  box-shadow: 0px 0px;
-  transform: translate(0px, 0px);
+/*** HEADER PROPERTIES ***/
+#header {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    z-index: 1;
 }
 
-.btn-plain {
-  border: 1px solid var(--secondary, lightgray);
-  box-shadow: 0px 0px;
-}
-.btn-plain:hover {
-  box-shadow: 0px 0px;
-  transform: translate(0px, 0px);
-}
-
-.btn:disabled {
-  color: gray;
-  background: lightgray;
-  border: 1px solid darkgray;
-  box-shadow: 0px 0px;
-  pointer-events: none;
+#header-bar {
+    height: 70px;
+    background-color: #8ECAE6;
+    border: 1px solid #219EBC;
+    font-size: 24px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 0px;
 }
 
-.btn-small {
-  width: 75px;
-  height: 25px;
-  font-size: 0.6em;
-  font-weight: bold;
+#links-bar {
+    position: relative;
+    top: -5px;
+    margin: 0 auto;
+    height: 50px;
+    width: 130px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #219EBC;
+    border: 1px solid #023047;
+    z-index: -1;
 }
 
-ul {
-  list-style: none;
+#links-bar i {
+    color: var(--font);
+    font-size: 24px;
+    margin: 15px;
 }
 
-/* Banner */
-.banner {
-  display: flex;
-  align-self: flex-start;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--text, black);
-  background: var(--main, white);
+#links-bar a {
+    margin: auto;
+    text-decoration: none;
 }
 
-.banner-title {
-  padding-bottom: 0px;
-  font-size: 1.6em;
-  font-weight: bold;
-}
-.banner-subtitle {
-  padding-top: 0px;
-  font-size: 0.8em;
+/*** INTRO PROPERTIES ***/
+#intro {
+    width: 100%;
+    text-align: center;
 }
 
-.banner a {
-  color: var(--text);
-  text-decoration: none;
+#intro h1 {
+    font-family: 'Bad Script', 'Brush Script MT', cursive;
+    font-size: 96px;
+    margin: 0.1em 0 0 0.5em;
 }
 
-/* Box */
-.box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#intro p {
+    width: 55%;
+    margin: auto;
+    font-size: 20px;
 }
 
-.box-small {
-  width: 25%;
+/*** MAIN CONTENT LAYOUT PROPERTIES ***/
+#main-content-area {
+    width: 100%;
+    /* height: 100%; */
 }
 
-.box-full {
-  width: 100%;
+#main-content-area section {
+    margin: 2em 0 0 1em;
+    float: left;
 }
 
-.box-nocenter {
-  align-items: flex-start;
-  justify-content: flex-start;
+/*** SIDEBAR PROPERTIES ***/
+#sidebar {
+    position: sticky;
+    top: 100px;
+    width: 25%;
+    max-width: 330px;
+    min-width: 250px;
 }
 
-.box-vertical {
-  flex-direction: column;
+#sidebar-content {
+    padding: 1em;
+    text-align: center;
 }
 
-/* Button */
-.btn {
-  padding: 0.5em 1em;
-  color: var(--text, black);
-  background: var(--main, white);
-  border: 1px solid var(--secondary, lightgray);
-  border-radius: 8px;
-  box-shadow: -1px 2px var(--tertiary, darkgray);
+#sidebar-header {
+    background-color: var(--tertiary);
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    width: 100%;
+    margin: 0;
 }
 
-.btn-secondary {
-  color: var(--secondary-text, white);
-  border: 1px solid var(--main, white);
-  background: var(--secondary, black);
+.header-button {
+    height: 60px;
+    width: 60px;
+    border: none;
+    background: none;
+    color: var(--alternate);
+    font-size: 24px;
+    z-index: 2;
+}
+.header-button:hover {
+    cursor: pointer;
 }
 
-.btn:hover {
-  cursor: pointer;
-}
-.btn:active {
-  box-shadow: 0px 0px;
-  transform: translate(0px, 0px);
-}
-
-.btn-plain {
-  border: 1px solid var(--secondary, lightgray);
-  box-shadow: 0px 0px;
-}
-.btn-plain:hover {
-  box-shadow: 0px 0px;
-  transform: translate(0px, 0px);
+/* Default to profile button being selected */
+#profile-button {
+    background-color: #8ECAE6;
+    border: 1px solid #FFB703;
+    border-bottom: 0px;
 }
 
-.btn:disabled {
-  color: gray;
-  background: lightgray;
-  border: 1px solid darkgray;
-  box-shadow: 0px 0px;
-  pointer-events: none;
+#sidebar-body {
+    min-height: 300px;
+    background-color: #8ECAE6;
+    padding: 1em;
+    color: var(--font);
 }
 
-.btn-small {
-  width: 75px;
-  height: 25px;
-  font-size: 0.6em;
-  font-weight: bold;
+.sidebar-item {
+    display: none;
+    flex-direction: column;
+    align-items: center;
 }
 
-/** Card **/
-.card {
-  display: flex;
-  height: 200px;
-  width: 75%;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid var(--secondary);
-  padding: 1em;
-  margin: 1em;
-  text-align: center;
-  border-radius: 8px;
+#profile-body {
+    display: flex;
 }
 
-.card-backdrop {
-  box-shadow: -3px 5px var(--main);
+#search-input {
+    height: 20px;
+    width: 75%;
+    margin-bottom: 1em;
+    border: 1px solid var(--alternate2);
+    border-radius: 8px;
+}
+#search-input:focus {
+    outline: none;
+    transform: translate(2.5px, 1.5px);
+    box-shadow: inset 2.5px 1.5px var(--alternate2);
 }
 
-/* Card sizes */
-.card-full {
-  width: 100%;
+#more-filters-button {
+    margin-top: 1em;
+    padding: 0;
+    border: none;
+    background: none;
+    text-decoration: underline;
+    font-size: 16px;
+}
+#more-filters-button:hover {
+    cursor: pointer;
 }
 
-.card-micro {
-  height: auto;
-  width: auto;
-  padding: 1em;
+#filter-display-area {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1em;
+    gap: 0.2em;
 }
 
-/* Card anatomy */
-.card-header {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 0em 1em 0em;
-  height: 33%;
+/*** RECIPES AREA PROPERTIES ***/
+#recipes {
+    width: 70%;
 }
 
-.card-body {
-  display: flex;
-  flex-direction: column;
-  padding: 1.3em;
-  height: 42%;
+#recipes-content {
+    color: var(--font);
+    padding: 1em;
+    text-align: center;
 }
 
-.card-footer {
-  height: 25%
+/*** MULTI USE ***/
+.standard-button {
+    margin: 0 0.5em;
+    padding: 0.5em 1em;
+    background-color: var(--alternate);
+    border: 1px solid var(--alternate2);
+    border-radius: 5px;
+    box-shadow: 1px 2px var(--alternate2);
 }
-
-.category-header {
-  font-size: 1.15em;
-  font-weight: bold;
-  padding: 7px 0px;
-  text-decoration: underline;
+.standard-button:hover {
+    cursor: pointer;
+    box-shadow: 2px 3.5px var(--alternate2);
+    transform: translate(-1px, -1.5px);
 }
-.category-item {
-  padding: 5px 0px;
-}
-
-/** Checkbox **/
-input[type="checkbox"] {
-  /* Hide checkbox default styles */
-  appearance: none;
-  background-color: var(--bg-color);
-  margin: 0;
-  
-  /* Custom style */
-  font: inherit;
-  color: var(--main);
-  width: 1.15em;
-  height: 1.15em;
-  border: 0.15em solid var(--secondary);
-  border-radius: 0.15em;
-  transform: translateY(-0.075em);
-
-  display: grid;
-  place-content: center;
-}
-input[type="checkbox"]::before {
-  content: "";
-  width: 0.65em;
-  height: 0.65em;
-  transform: scale(0);
-  transition: 120ms transform ease-in-out;
-  box-shadow: inset 1em 1em var(--main);
-
-  /* Checkmark style */
-  transform-origin: bottom left;
-  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-input[type="checkbox"]:checked::before {
-  transform: scale(1);
-}
-input[type="checkbox"]:hover {
-  cursor: pointer;
-}
-
-.color-box {
-  font: inherit;
-  color: #fff;
-  width: 1.15em;
-  height: 1.15em;
-  border: 0.15em solid var(--secondary);
-  border-radius: 0.15em;
-  transform: translateY(-0.075em);
-}
-
-/* Dropdown */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 15px;
-  background-color: rgba(0, 0, 0, 0);
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rbga(0, 0, 0, 0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  color: black;
-  background-color: lightgray;
-  opacity: 0%;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-.dropdown-content a:hover {
-  background-color: #ddd;
-}
-
-.intro {
-  max-width: 957px;
-}
-.intro h1 {
-  font-family: "Bad Script", serif;
-  font-size: 4em;
-  font-weight: bold;
-  margin-bottom: 0px;
-}
-.intro p {
-  width: 75%;
-  text-align: center;
-}
-
-.pad-medium {
-  padding: 3em;
-}
-
-.recipe {
-  margin: 1em;
-  padding: 1em;
-  text-align: left;
-  min-width: 150px;
-  max-width: 500px;
-  box-shadow: -3px 3px 5px gray;
-  border: 1px solid black;
-}
-.recipe-title {
-  padding-bottom: 1em;
-}
-.recipe-title h1 {
-  padding: 0px;
-  margin: 0px;
-}
-
-.tag {
-  font-size: 12px;
-  padding: 0em 1em;
-  border: 1px solid black;
-  border-radius: 4px;
-  opacity: 1;
-  background-color: #fff;
-}
-
-#categoriesContainer {
-  display: grid;
-  grid-template-columns: 150px 25px;
-  /* grid-template-rows: repeat(auto-fit, 1fr); */
-  grid-auto-rows: auto;
-}
-
-#filtersPanel {
-  border: 1px solid black;
-  padding: 1em 1em;
-}
-
-#recipesContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(max(350px, 400px), 1fr));
-  gap: 1em;
-  justify-items: center;
-}
-
-#new-recipesContainer {
-  align-items: flex-start;
-}
+.standard-button:active {
+    box-shadow: 0px 0px;
+    transform: translate(0px, 0px);
+  }

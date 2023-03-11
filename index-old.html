@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Jean's Recipe Book</title>
+
+  <link rel="stylesheet" href="./styles-old/index.css" />
+  <link rel="stylesheet" href="./styles-old/animations.css" />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dosis&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/c7ff23f1ca.js" crossorigin="anonymous"></script>
+</head>
+
+<body onload="load();">
+  <!-- Banner -->
+  <nav class="box box-full box-vertical">
+    <div class="banner">
+      <div class="box" style="padding-left: 2em;">
+        <h4>
+          <a href="#"><i class="fa-solid fa-house fa-xl"></i></a>
+        </h4>
+      </div>
+      <div class="box box-vertical">
+        <div class="banner-title">Jeffrey Carr</div>
+      </div>
+      <div class="box" style="padding-right: 2em;">
+        <a onclick="toggleDropdown()" id="apps-dropdown">
+          <div class="box box-vertical" id="apps-dropdown">
+              <i class="fa-solid fa-cubes-stacked" id="apps-dropdown"></i>
+              <span id="apps-dropdown">Apps</span>
+          </div>
+        </a>
+        <div class="dropdown-content" id="apps-dropdown-container">
+          <a href="https://www.jeffreycarr.dev/">Main Site</a>
+          <a href="https://recipe.jeffreycarr.dev">Recipe Book</a>
+          <a href="https://bingo.jeffreycarr.dev">Bingo Creator</a>
+        </div>
+      </div>  
+    </div>
+  </nav>
+
+  <!-- Intro -->
+  <div class="box box-full">
+    <!-- Box to hold text. Looks better when it isn't one line each, so cap it out at 957px -->
+    <div class="box box-vertical intro">
+      <h1>Jean's Recipe Book</h1>
+      <p>
+        Welcome to Jean's recipe book! A website inspired by the binder my mom kept
+        of recipes our family loved. This website is a tribute to her and everything she contributed
+        to the Carr family.
+      </p>
+      <p>
+        This recipe was made to be easy to use and helpful for everyone. If you have any issues/suggestions,
+        please email me at <a href="mailto:jeffrey.carr98@gmail.com">jeffrey.carr98@gmail.com</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Main area. Has 3 columns: Filters | Recipes | Favorites -->
+  <div class="box box-full box-vertical box-nocenter">
+    <!-- Search bar and filters -->
+    <div class="box box-full">
+      <input type="text" />
+      <button class="btn">Search</button>
+    </div>
+
+    <!-- Recipes -->
+    <div class="box box-full box-vertical box-nocenter">
+      <div class="box box-full box-vertical" id="new-recipesContainer">
+        Loading Recipes...
+      </div>
+    </div>
+    <!-- Favorites -->
+    <!-- Idea: Two separate panels for favorites and menu. Make them collapsible and allow the menu to be printed -->
+    <!-- <div class="box box-small box-vertical pad-medium">
+      <h1>Favorites</h1>
+
+      <div class="box box-full" id="favoritesContainer">
+        Loading Favorites...
+      </div>
+    </div> -->
+  </div>
+
+  <script src="./js/index.js" type="text/javascript"></script>
+</body>
+
+</html>
