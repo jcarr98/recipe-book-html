@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jean's Recipe Book</title>
+
+    <link rel="stylesheet" href="./styles/login.css">
+    <link rel="stylesheet" href="./styles/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dosis&display=swap" rel="stylesheet">
+  </head>
+  <body onload="verifyLogin()">
+    <h1>Verifying your login request...</h1>
+    <button class="standard-button" onclick="window.location.replace('https://localhost:5500')">Back to home</button>
+
+    <script type="text/javascript">
+      async function verifyLogin() {
+        console.log('Verifying login with server...');
+        // Get query parameters
+        let queryString = window.location.search;
+
+        // Parse query parameters
+        let urlParams = new URLSearchParams(queryString);
+
+        // Get csrf
+        let csrf = urlParams.get('state');
+        // Get code
+        let code = urlParams.get('code');
+        // Get scope
+        let scope = urlParams.get('scope');
+
+        // Send response to server
+        let data = await fetch(`https://localhost:5001/auth/google/verify_login?csrf=${csrf}&code=${code}&scope=${scope}`, {credentials: 'include'});
+        let jsonData = JSON.parse(await data.text());
+
+        if(jsonData['status'] == "success") {
+          window.location.replace('https://localhost:5500/');
+        } else {
+          window.location.replace('https://localhost:5500/?login_error=true');
+        }
+      }
+    </script>
+  </body>
+</html>

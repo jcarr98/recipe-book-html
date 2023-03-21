@@ -9,7 +9,7 @@
         <script src="https://kit.fontawesome.com/c7ff23f1ca.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dosis&display=swap" rel="stylesheet">
     </head>
-    <body>
+    <body onload="load()">
         <header id="header">
             <div id="header-bar">
                 <h1>Jeffrey Carr</h1>
@@ -37,7 +37,7 @@
                         <button id="search-button" class="header-button" onclick="switchSidebar('search')">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
-                        <button id="favs-button" class="header-button" onclick="switchSidebar('favs')">
+                        <button id="favs-button" class="header-button authenticated-only" onclick="switchSidebar('favs')">
                             <i class="fa-regular fa-heart"></i>
                         </button>
                         <button id="rand-button" class="header-button" onclick="switchSidebar('rand')">
@@ -48,23 +48,36 @@
                         <!-- PROFILE BODY-->
                         <div id="profile-body" class="sidebar-item">
                             <h2>Hello, User</h2>
-                            <button class="standard-button">Sign in with Google</button>
+                            <button class="standard-button" onclick="login()">Sign in with Google</button>
                         </div>
                         <!-- SEARCH BODY -->
                         <div id="search-body" class="sidebar-item">
                             <h2>Search</h2>
                             <input type="text" id="search-input" name="searchInput">
-                            <button id="search-button" class="standard-button" onclick="search()">Search</button>
+                            <div style="display: inline-block">
+                                <button id="search-button" class="standard-button" onclick="search()">Search</button>
+                                <button id="search-reset-button" class="plain-button" onclick="resetSearch()">Clear</button>
+                            </div>
                             <button id="more-filters-button" onclick="addFilter()">More Filters</button>
                             <div id="filter-display-area"></div>
                         </div>
                         <!-- FAVORITES BODY -->
                         <div id="favs-body" class="sidebar-item">
                             <h2>Favorites</h2>
+                            <div id="favorites-area"></div>
                         </div>
                         <!-- RANDOM RECIPE BODY -->
                         <div id="rand-body" class="sidebar-item">
                             <h2>Random Recipe</h2>
+                            <div id="chef-container"> 
+                                <img id="chef-img" src="./images/chef.svg" />
+                            </div>
+                            <button class="standard-button" onclick="pickRandomRecipe()">I'm Feeling Lucky!</button>
+                            <div id="random-recipe-test">
+                                <div class="random-recipe-item">
+                                </div>
+                            </div>
+                            <div id="random-recipe-container"></div>
                         </div>
                     </div>
                 </div>
@@ -72,13 +85,25 @@
             <!-- Recipes -->
             <section id="recipes">
                 <div id="recipes-content">
-                    <h2>Recipes</h2>
+                    <div id="recipe-header-container">
+                        <button id="all-recipes-button" class="recipe-header-button recipe-button-selected" onclick="switchRecipeView('all')"><h2>All Recipes</h2></button>
+                        <!-- Set style to 'none' initially so we only show this button to authenticated users -->
+                        <button id="your-recipes-button" class="recipe-header-button authenticated-only" onclick="switchRecipeView('your')"><h2>Your Recipes</h2></button>
+                    </div>
+                    <div id="all-recipes-area" class="grid-area recipe-area-selected">
+                        <h3>No recipes to show :(</h3>
+                    </div>
+                    <div id="your-recipes-area" class="grid-area">
+                        <h3>No recipes to show :(</h3>
+                    </div>
                 </div>
             </section>
 
-            <div id="testing" style="height: 10000px"></div>
+            <!-- <div id="testing" style="height: 10000px"></div> -->
         </main>
 
+        <!-- Scripts -->
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/buildElements.js"></script>
     </body>
 </html>

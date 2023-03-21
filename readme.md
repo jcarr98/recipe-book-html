@@ -1,0 +1,2 @@
+# Setting up server
+The cookies required for this website to function require your development server be running https. To set up the HTTPS server, a certificate and key are required to be set up for `localhost`. Follow [this guide](https://technixleo.com/create-locally-trusted-ssl-certificates-with-mkcert-on-windows/) to set up your own certificates for development. Place your generated certificates in `certs/`. If using the `live-server` extension, the settings are available to set it up as an HTTPS server.
