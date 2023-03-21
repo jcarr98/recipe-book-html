@@ -21,7 +21,7 @@ async function load() {
 }
 
 async function getCategories() {
-    const responsePromise = await fetch(`https://localhost:5001/api/get/categories`);
+    const responsePromise = await fetch(`https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/api/get/categories`);
     const responseJson = JSON.parse(await responsePromise.text());
 
     if(responseJson['status'] == "success") {
@@ -36,7 +36,7 @@ async function getCategories() {
 async function getRecipes(page=1, limit=10) {
     console.log("Loading recipes");
     // Default to page 1 and 10 per page
-    const responsePromise = await fetch(`https://localhost:5001/api/get/recipes?page=${page}&limit=${limit}`);
+    const responsePromise = await fetch(`https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/api/get/recipes?page=${page}&limit=${limit}`);
     let responseJson = JSON.parse(await responsePromise.text());
 
     console.log(responseJson);
@@ -67,7 +67,7 @@ async function getRecipes(page=1, limit=10) {
 
 async function checkUser() {
     // Check if user is authenticated in the backend
-    let response = await fetch(`https://localhost:5001/auth/check_authentication`, {credentials: 'include'});
+    let response = await fetch(`https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/auth/check_authentication`, {credentials: 'include'});
     let data = JSON.parse(await response.text());
     
     // Default page shows unauthenticated user, so don't change anything
@@ -93,7 +93,7 @@ async function getFavorites() {
         return;
     }
 
-    const responsePromise = await fetch(`https://localhost:5001/api/get/favorites`, {credentials: 'include'});
+    const responsePromise = await fetch(`https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/api/get/favorites`, {credentials: 'include'});
     const responseJson = JSON.parse(await responsePromise.text());
 
     // Check status
@@ -155,7 +155,7 @@ async function search() {
         return;
     }
 
-    let responsePromise = await fetch(`https://localhost:5001/api/get/search?search=${searchTerm}`);
+    let responsePromise = await fetch(`https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/api/get/search?search=${searchTerm}`);
     let responseJson = JSON.parse(await responsePromise.text());
 
     if(responseJson['status'] == "failure") {
@@ -190,7 +190,7 @@ async function toggleItemFavoritism(id) {
 async function addFavorite(id) {
     // Save favorite to database
     favorites.push(id);
-    let favoriteResponse = await fetch(`https://localhost:5001/api/post/favorite_item`, {
+    let favoriteResponse = await fetch(`https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/api/post/favorite_item`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -209,7 +209,7 @@ async function addFavorite(id) {
 
 async function removeFavorite(id) {
     // First, try to remove from server since that is the most likely to fail
-    let unfavoriteResponse = await fetch(`https://localhost:5001/api/post/unfavorite_item`, {
+    let unfavoriteResponse = await fetch(`https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/api/post/unfavorite_item`, {
         credentials: 'include',
         method: 'POST',
         headers: {
@@ -301,7 +301,7 @@ function getRecipeName(id) {
 
 async function login() {
     // First, get CSRF and nonce from backend
-    let tokensPromise = await fetch(`https://localhost:5001/auth/tokens`, {credentials: 'include'});
+    let tokensPromise = await fetch(`https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/auth/tokens`, {credentials: 'include'});
     let tokensJson = JSON.parse(await tokensPromise.text());
 
     // Write required fields for authentication request and encode necessary URI components
@@ -318,7 +318,7 @@ async function login() {
 
 async function logout() {
     // Send destroy notification to backend
-    await fetch("https://localhost:5001/auth/logout", {credentials: 'include'});
+    await fetch("https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/auth/logout", {credentials: 'include'});
 
     // Change user panel
     updateUserPanel();
@@ -400,7 +400,7 @@ async function pickRandomRecipe() {
     randomRecipeContainer.innerHTML = '';
     randomRecipeContainer.innerText = "Gather ingredients...";
 
-    let responsePromise = await fetch('https://localhost:5001/api/get/random');
+    let responsePromise = await fetch('https://recipe-book-backend-test-yal6zyrksa-ue.a.run.app/api/get/random');
     let responseJson = JSON.parse(await responsePromise.text());
 
     console.log(responseJson);
