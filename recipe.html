@@ -3,10 +3,70 @@
   <head>
     <title>Jean's Recipe Book</title>
 
-    <link rel="stylesheet" href="./styles/index.css">
+    <!-- Custom stylesheets -->
+    <link rel="stylesheet" href="./styles/shared.css">
+    <link rel="stylesheet" href="./styles/recipe.css">
+
+    <!-- External refs -->
+    <script src="https://kit.fontawesome.com/c7ff23f1ca.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dosis&display=swap" rel="stylesheet">
   </head>
-  <body>
-    <h1>Viewing recipe</h1>
+  <body onload="load()">
+    <header id="header">
+      <div id="header-bar">
+          <h1>Jeffrey Carr</h1>
+      </div>
+      <div id="links-bar">
+          <a href="#home"><i class="fa-solid fa-house"></i></a>
+          <a href="#apps"><i class="fa-solid fa-cubes-stacked"></i></a>
+      </div>
+    </header>
+
+    <section id="options-section">
+      <button class="plain-button" onclick="window.location.replace('https://localhost:5500/')"><i class="fa-solid fa-arrow-left"></i> Back to recipe list</button>
+    </section>
+
+    <section id="recipe-info">
+      <div id="recipe-info-loading"><h1>Loading recipe info...</h1></div>
+      <div id="recipe-info-data" style="display:none">
+        <h1 id="recipe-title"></h1>
+
+        <p id="recipe-author">Author:</p>
+        <p id="recipe-description">Description:</p>
+        <div id="recipe-buttons">
+          <button id="favorite-button" class="standard-button">Add to favorites</button>
+          <button class="plain-button" onclick="updateKeepAwake()"><i id="keep-awake-icon" class="fa-solid fa-eye-slash"></i> Keep screen awake</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="ingredients-section">
+      <div id="ingredients-loading"><p>Loading ingredients...</p></div>
+      <div id="ingredients-data" style="display: none;">
+        <div>
+          <table id="ingredients-table">
+            <tr>
+              <th>Ingredient</th>
+              <th>Prep</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="directions-section">
+      <h1>Directions</h1>
+      <div id="directions-loading"><p>Loading directions...</p></div>
+      <div id="directions-data">
+        <div id="directions-area"></div>
+      </div>
+    </section>
+
     <button class="standard-button" onclick="window.location.replace('https://localhost:5500')">Back to main</button>
+    <button class="standard-button" onclick="printValue('info')">Print recipe info</button>
+    <button class="standard-button" onclick="printValue('ingredients')">Print recipe ingredients</button>
+    <button class="standard-button" onclick="printValue('directions')">Print recipe directions</button>
+
+    <script type="text/javascript" src="./js/recipe.js"></script>
   </body>
 </html>

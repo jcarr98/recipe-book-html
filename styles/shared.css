@@ -1,0 +1,86 @@
+/* Define color variables for themeing in the future */
+:root {
+  --primary: #8ECAE6;
+  --secondary: #219EBC;
+  --tertiary: #023047;
+  --alternate: #FFB703;
+  --alternate2: #FB8500;
+  --font: #023047;
+}
+
+body {
+  margin: 0;
+  color: var(--font, black);
+  font-family: Dosis, sans-serif;
+}
+
+/*** HEADER PROPERTIES ***/
+#header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+#header-bar {
+  height: 70px;
+  background-color: #8ECAE6;
+  border: 1px solid #219EBC;
+  font-size: 24px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 0px;
+}
+
+#links-bar {
+  position: relative;
+  top: -5px;
+  margin: 0 auto;
+  height: 50px;
+  width: 130px;
+  text-align: center;
+  border-radius: 5px;
+  background-color: #219EBC;
+  border: 1px solid #023047;
+  z-index: -1;
+}
+
+#links-bar i {
+  color: var(--font);
+  font-size: 24px;
+  margin: 15px;
+}
+
+#links-bar a {
+  margin: auto;
+  text-decoration: none;
+}
+
+/*** BUTTONS ***/
+.standard-button {
+  margin: 0 0.5em;
+  padding: 0.5em 1em;
+  background-color: var(--alternate);
+  border: 1px solid var(--alternate2);
+  border-radius: 5px;
+  box-shadow: 1px 2px var(--alternate2);
+}
+.standard-button:hover {
+  cursor: pointer;
+  box-shadow: 2px 3.5px var(--alternate2);
+  transform: translate(-1px, -1.5px);
+}
+.standard-button:active {
+  box-shadow: 0px 0px;
+  transform: translate(0px, 0px);
+}
+
+.plain-button {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+}
+.plain-button:hover {
+  cursor: pointer;
+}
