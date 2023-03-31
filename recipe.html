@@ -15,19 +15,22 @@
     <header id="header">
       <div id="header-bar">
           <h1>Jeffrey Carr</h1>
+          <div id="header-links">
+            <a href="https://www.jeffreycarr.dev">Main site</a>
+            <a href="/">Recipes</a>
+            <a href="https://www.bingo.jeffreycarr.dev">Bingo creator</a>
+          </div>
       </div>
-      <div id="links-bar">
-          <a href="#home"><i class="fa-solid fa-house"></i></a>
-          <a href="#apps"><i class="fa-solid fa-cubes-stacked"></i></a>
+      <div id="return-bar">
+          <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to recipes</a>
       </div>
     </header>
 
-    <section id="options-section">
-      <button class="plain-button" onclick="window.location.replace('https://localhost:5500/')"><i class="fa-solid fa-arrow-left"></i> Back to recipe list</button>
-    </section>
-
     <section id="recipe-info">
-      <div id="recipe-info-loading"><h1>Loading recipe info...</h1></div>
+      <div class="loading-img" id="recipe-info-loading">
+        <img src="./images/loading.svg"> 
+        <div>Loading...</div>
+      </div>
       <div id="recipe-info-data" style="display:none">
         <h1 id="recipe-title"></h1>
 
@@ -41,11 +44,16 @@
     </section>
 
     <section id="ingredients-section">
-      <div id="ingredients-loading"><p>Loading ingredients...</p></div>
+      <h2>Ingredients</h2>
+      <div class="loading-img" id="ingredients-loading">
+        <img src="./images/loading.svg"> 
+        <div>Loading...</div>
+      </div>
       <div id="ingredients-data" style="display: none;">
         <div>
           <table id="ingredients-table">
             <tr>
+              <th>Amount</th>
               <th>Ingredient</th>
               <th>Prep</th>
             </tr>
@@ -55,17 +63,15 @@
     </section>
 
     <section id="directions-section">
-      <h1>Directions</h1>
-      <div id="directions-loading"><p>Loading directions...</p></div>
+      <h2>Directions</h2>
+      <div class="loading-img" id="directions-loading">
+        <img src="./images/loading.svg"> 
+        <div>Loading...</div>
+      </div>
       <div id="directions-data">
         <div id="directions-area"></div>
       </div>
     </section>
-
-    <button class="standard-button" onclick="window.location.replace('https://localhost:5500')">Back to main</button>
-    <button class="standard-button" onclick="printValue('info')">Print recipe info</button>
-    <button class="standard-button" onclick="printValue('ingredients')">Print recipe ingredients</button>
-    <button class="standard-button" onclick="printValue('directions')">Print recipe directions</button>
 
     <script type="text/javascript" src="./js/recipe.js"></script>
   </body>

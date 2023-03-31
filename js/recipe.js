@@ -93,15 +93,20 @@ function displayIngredients() {
     // Create list item
     let tr = document.createElement('tr');
 
+    // Create Amount item
+    let amount = document.createElement('td');
+    amount.innerText = `${(item['amount'] != null) ? `${item['amount']}` : ""}`;
+
     // Create Ingredient item
     let ingredient = document.createElement('td');
-    ingredient.innerText = `${(item['amount'] != null) ? `${item['amount']}` : ""} ${item['ingredientName'].toLowerCase()}`;
+    ingredient.innerText = item['ingredientName'];
 
     // Create Prep item
     let prep = document.createElement('td');
-    prep.innerText = (item['prep'] != null) ? item['prep'] : "None";
+    prep.innerText = (item['prep'] != null) ? item['prep'] : "";
 
     // Add text to item
+    tr.appendChild(amount);
     tr.appendChild(ingredient);
     tr.appendChild(prep);
 
@@ -139,12 +144,13 @@ function displayRecipeDirections() {
     let direction = recipeDirections[i];
 
     let directionItem = document.createElement('div');
+    directionItem.classList.add('step-item');
 
-    let stepNum = document.createElement('p');
+    let stepNum = document.createElement('div');
     stepNum.classList.add('step-num');
     stepNum.innerText = `Step ${i+1}.`;
 
-    let step = document.createElement('p');
+    let step = document.createElement('div');
     step.classList.add('step');
     step.innerText = direction['step'];
     

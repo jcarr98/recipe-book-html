@@ -3,9 +3,27 @@
   <head>
     <title>Jean's Recipe Book</title>
 
-    <link rel="stylesheet" href="./styles/index.css">
+    <!-- Custom refs -->
+    <link rel="stylesheet" href="./styles/shared.css">
+    <!-- External refs -->
+    <script src="https://kit.fontawesome.com/c7ff23f1ca.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dosis&display=swap" rel="stylesheet">
   </head>
   <body>
+    <header id="header">
+      <div id="header-bar">
+          <h1>Jeffrey Carr</h1>
+          <div id="header-links">
+            <a href="https://www.jeffreycarr.dev">Main site</a>
+            <a href="/">Recipes</a>
+            <a href="https://www.bingo.jeffreycarr.dev">Bingo creator</a>
+          </div>
+      </div>
+      <div id="return-bar">
+          <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to recipes</a>
+      </div>
+    </header>
+
     <h1>Create Recipe Page</h1>
     <button class="standard-button" onclick="window.location.replace('https://localhost:5500');">Back to main</button>
   </body>
