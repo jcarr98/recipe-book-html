@@ -1,4 +1,4 @@
-function buildRecipeCard(recipe) {
+function buildRecipeCard(recipe, favorited) {
   /* HTML version:
     <div class="grid-item">
       <div class="recipe-card">
@@ -55,7 +55,11 @@ function buildRecipeCard(recipe) {
   favButton.classList.add('plain-button');
   favButton.classList.add('authenticated-only');
   favButton.onclick = () => { toggleItemFavoritism(recipe['rec_id']) };
-  favButton.innerHTML = '<i class="fav-button-icon fa-regular fa-heart"></i>';
+  if(favorited) {
+    favButton.innerHTML = '<i class="fav-button-icon fa-regular fa-heart fa-solid"></i>';
+  } else {
+    favButton.innerHTML = '<i class="fav-button-icon fa-regular fa-heart"></i>';
+  }
 
   cardFooter.appendChild(goButton);
   cardFooter.appendChild(favButton);
@@ -82,7 +86,7 @@ function createFavoriteLI(id, recipeName) {
   deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
   deleteButton.classList.add('plain-button');
   deleteButton.style.fontSize = '18px';
-  deleteButton.onclick = () => { toggleItemFavoritism(id) };
+  deleteButton.onclick = async () => { await toggleItemFavoritism(id) };
 
   li.appendChild(liAnchor);
   li.appendChild(deleteButton);
@@ -102,4 +106,14 @@ function createRandomRecipeLink(id, recipeName) {
   container.appendChild(anchor);
 
   return container;
+}
+
+function buildPageinationButton(index, isActive) {
+  const button = document.createElement('button');
+  button.classList.add('pageination-button');
+  if(isActive) button.classList.add('pageination-active');
+  else button.onclick = async () => { url.searchParams.set('page', index); window.history.replaceState(null, null, url); await loadRecipes(); };
+  button.innerText = index;
+
+  return button;
 }

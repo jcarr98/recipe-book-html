@@ -1,16 +1,17 @@
-let userInfo;
-let currentSidebarSelected = 'profile';
-let currentRecipesSelected = 'all';
-let categories;
-let recipes;
-let favorites = [];
+let userInfo, categories, recipes, totalRecipes;
+// Favorites is List of recipes ids, favoriteNames is Object of id:names
+// Keep a separate list of just favorite ids because we use .includes a lot
+let favorites, favoritesNames;
+let currentSidebarSelected = 'profile';  // Defaults to profile section
+let currentRecipesSelected = 'all';  // Defaults to showing all recipes
+const url = new URL(window.location.href);
 
 async function load() {
+    // Get all our categories
     getCategories();
-    // Favorites need a full list of recipes, so we need to wait for this to finish
-    await getRecipes();
-    await checkUser();  // checkUser needs to come after getRecipes because the hearts on the cards are authenticated-only
-    getFavorites();
+
+    // Get everything recipe related
+    loadRecipes();
 
     // Create triggers
     document.getElementById('search-input').addEventListener('keypress', function(event) {
@@ -25,44 +26,88 @@ async function getCategories() {
     const responseJson = JSON.parse(await responsePromise.text());
 
     if(responseJson['status'] == "success") {
-        console.log("Successfully received categories!");
-        console.log(responseJson['data']);
         categories = responseJson['data'];
     } else {
-        console.log("Error retrieving categories");
+        console.error("Error retrieving categories");
     }
 }
 
-async function getRecipes(page=1, limit=10) {
-    console.log("Loading recipes");
+/** Run every method that is required when loading recipe items
+ * 
+ * Because we have multiple times we need to load the recipes (on page load, changing page, specifying author), we will need to call
+ * all these functions multiple times. It is easier to just include one function call than remembering all functions are need calling
+ */
+async function loadRecipes() {
+    await getRecipes();
+    await checkUser();
+    // To avoid querying the database on each recipe view change, check if we already have this data saved
+    if(favorites == undefined) {
+        await getFavorites();
+    }
+    
+    // Build recipe cards
+    let cardArea;
+    let author = currentRecipesSelected == "your" ? userInfo['user_id'] : null;
+    if(author != null) {
+        cardArea = document.getElementById('your-recipes-area');
+    } else {
+        cardArea = document.getElementById('all-recipes-area');
+    }
+
+    cardArea.innerHTML = '';
+
+    // If we have no recipes, display message
+    if(recipes.length == 0) {
+        cardArea.innerHTML = '<p>No recipes to show :(</p>';
+    } else {
+        for(let i = 0; i < recipes.length; i++) {
+            let recipe = recipes[i];
+            let card = buildRecipeCard(recipe, (favorites.includes(recipe['rec_id'])));
+            cardArea.appendChild(card);
+        }
+    }
+
+    toggleAuthenticatedItems();
+}
+
+async function getRecipes() {
+    // Get the page number and how many to display per page
     // Default to page 1 and 10 per page
-    const responsePromise = await fetch(`https://localhost:5001/api/get/recipes?page=${page}&limit=${limit}`);
+    let page = url.searchParams.get('page') == null ? 1 : url.searchParams.get('page');
+    let limit = url.searchParams.get('perPage') == null ? 10 : url.searchParams.get('perPage');
+    let author = currentRecipesSelected == "your" ? userInfo['user_id'] : null;
+
+    let query = `https://localhost:5001/api/get/recipes?page=${page}&limit=${limit}`;
+    if(author != null) {
+        query = query + "&author=" + author;
+    }
+
+    const responsePromise = await fetch(query);
     let responseJson = JSON.parse(await responsePromise.text());
 
-    console.log(responseJson);
-
     if(responseJson['status'] == "success") {
-        console.log("Successfully received recipes!");
-        console.log(`Retrieved ${responseJson['data'].length} recipes`);
-        console.log(`There are ${responseJson['numRecipes']} recipes in this database`);
-        console.log(`That means we will need ${responseJson['numRecipes']/limit} pages`);
-        console.log(responseJson['data']);
+        totalRecipes = responseJson['numRecipes']
         recipes = responseJson['data'];
     } else {
         console.error("Error retrieving recipes");
         return;
     }
 
-    // Build recipe cards
-    const cardArea = document.getElementById('all-recipes-area');
-    cardArea.innerHTML = '';
-    for(let i = 0; i < recipes.length; i++) {
-        let card = buildRecipeCard(recipes[i]);
-        cardArea.appendChild(card);
+    showPageination();
+}
+
+function showPageination() {
+    let currentPage = url.searchParams.get('page') == null ? 1 : url.searchParams.get('page');
+    let perPage = url.searchParams.get('perPage') == null ? 10 : url.searchParams.get('perPage');
+
+    const totalButtons = Math.ceil(totalRecipes/perPage);
+    const pageinationContainer = document.getElementById(`${currentRecipesSelected}-pageination-container`);
+    pageinationContainer.innerHTML = '';
+    
+    // Start i=1. I know, it's gross but it'll be useful
+    for(let i=1; i < totalButtons+1; i++) {
+        pageinationContainer.appendChild(buildPageinationButton(i, (i == currentPage)));
     }
-    const testingDiv = document.createElement('div');
-    testingDiv.innerHTML = '<div id="testing" style="height: 10000px"></div>';
-    cardArea.appendChild(testingDiv);
 }
 
 async function checkUser() {
@@ -80,16 +125,12 @@ async function checkUser() {
 
     // Update user panel
     updateUserPanel(userInfo['fname']);
-    // Show all authenticated-only elements
-    let authenticatedElements = document.getElementsByClassName('authenticated-only');
-    for(let i = 0; i < authenticatedElements.length; i++) {
-        authenticatedElements[i].style.display = 'inline-block';
-    }
 }
 
 async function getFavorites() {
     // Check if user is authenticated
     if(userInfo == undefined) {
+        favorites = [];
         return;
     }
 
@@ -97,18 +138,18 @@ async function getFavorites() {
     const responseJson = JSON.parse(await responsePromise.text());
 
     // Check status
-    if(responseJson['status'] == "failure") {
+    if(responseJson['status'] != "success") {
         console.error("Error retrieving favorites");
         return;
     }
 
     // ResponseJson[data] should be an array of JSON objects, so let's turn it into an array
     const data = responseJson['data'];
+    favorites = [], favoritesNames = {};
     for(let i = 0; i < data.length; i++) {
         // Save ID globally
+        favoritesNames[data[i]['rec_id']] = data[i]['name'];
         favorites.push(data[i]['rec_id']);
-        // Update button
-        updateFavoriteButton(data[i]['rec_id']);
     }
 
     createFavoritesList();
@@ -148,10 +189,11 @@ function addFilter() {
 }
 
 async function search() {
-    console.log("Searching");
     searchTerm = document.getElementById('search-input').value;
+
+    // Used for reset
     if(searchTerm.replace(" ", "").length == 0) {
-        getRecipes();
+        loadRecipes();
         return;
     }
 
@@ -174,22 +216,41 @@ async function search() {
 
 function resetSearch() {
     document.getElementById('search-input').value = '';
-    getRecipes();
+    loadRecipes();
 }
 
 async function toggleItemFavoritism(id) {
+    // Set favorite button to loading
+    await setFavoriteLoading(id);
+
     let result = favorites.includes(id) ? await removeFavorite(id) : await addFavorite(id);
+    
     if(result['status'] == "success") {
         updateFavoriteButton(id);
         createFavoritesList();
+    }
+}
+
+async function setFavoriteLoading(id) {
+    const favoriteButton = document.getElementById(`fav-button-${id}`);
+
+    // Check if this favorite button is on the page
+    if(favoriteButton == undefined) {
+        // This could happen if a user clicks the delete button in the favorites list
+        // When the favorite item is on another page
+        return;
     } else {
-        console.error(result['message']);
-    }   
+        favoriteButton.innerHTML = '<img src="./images/loading.svg">';
+    }
+
+    // WHAT IS THIS???
+    // If the server is _too_ responsive, changing to a loading symbol looks jittery, so let's just ensure it doesn't
+    // Sorry user...
+    await new Promise(r => setTimeout(r, 150));
 }
 
 async function addFavorite(id) {
     // Save favorite to database
-    favorites.push(id);
     let favoriteResponse = await fetch(`https://localhost:5001/api/post/favorite_item`, {
         method: 'POST',
         credentials: 'include',
@@ -203,6 +264,12 @@ async function addFavorite(id) {
     if(favoriteJson['status'] != "success") {
         return { status: "failure", message: "Error favoriting item" };
     }
+
+    // Save favorite info to object
+    let recipeName = getRecipeName(id);
+    favoritesNames[id] = recipeName;
+    // Save favorite to list
+    favorites.push(id);
 
     return { status: "success", message: "Item saved successfully" };
 }
@@ -226,6 +293,7 @@ async function removeFavorite(id) {
     }
 
     // Remove favorite from all relevant arrays
+    delete favoritesNames[id];
     favorites.splice(favorites.indexOf(id), 1);
     // In theory, should be same index in both arrays, but to be safe we'll do our own iteration
     for(let i = 0; i < favorites.length; i++) {
@@ -239,10 +307,14 @@ async function removeFavorite(id) {
 }
 
 function updateFavoriteButton(id) {
-    // Get button
-    button = document.getElementById('fav-button-' + id);
+    let button = document.getElementById('fav-button-' + id);
 
-    oldIcon = button.children[0];
+    // Check if this favorite button is on the page
+    if(button == undefined) {
+        // This could happen if a user clicks the delete button in the favorites list
+        // When the favorite item is on another page
+        return;
+    }
 
     // Create new icon
     i = document.createElement('i');
@@ -250,8 +322,7 @@ function updateFavoriteButton(id) {
     i.classList.add('fa-heart');
 
     // Check if item is already liked
-    // If fa-solid, already liked
-    oldIcon.classList.contains('fa-solid') ? i.classList.add('fa-regular') : i.classList.add('fa-solid');
+    favorites.includes(id) ? i.classList.add('fa-solid') : i.classList.add('fa-regular');
 
     // Clear old icon
     button.innerHTML = '';
@@ -277,12 +348,13 @@ function createFavoritesList() {
 
     // Create a list item for each favorited recipe
     for(let i = 0; i < favorites.length; i++) {
-        let recipeName = getRecipeName(favorites[i]);
+        let favId = favorites[i];
+        let recipeName = favoritesNames[favId];
         // If we don't have this recipe, just skip it
         if(recipeName == null) {
             continue;
         } else {
-            favoritesList.appendChild(createFavoriteLI(favorites[i], recipeName));
+            favoritesList.appendChild(createFavoriteLI(favId, recipeName));
         }
     }
 
@@ -320,20 +392,17 @@ async function logout() {
     // Send destroy notification to backend
     await fetch("https://localhost:5001/auth/logout", {credentials: 'include'});
 
+    // Remove all user info
+    userInfo = undefined;
+
     // Change user panel
     updateUserPanel();
 
     // Hide authenticated only items
-    // Show all authenticated-only elements
-    let authenticatedElements = document.getElementsByClassName('authenticated-only');
-    console.log(authenticatedElements);
-    for(let i = 0; i < authenticatedElements.length; i++) {
-        authenticatedElements[i].style.display = 'none';
-    }
+    toggleAuthenticatedItems();
 
     // Set all recipes as selected just in case user was sitting on their recipe page
-    document.getElementById('all-recipes-button').classList.add('recipe-button-selected');
-    document.getElementById('all-recipes-area').classList.add('recipe-area-selected');
+    switchRecipeView('all');
 }
 
 function updateUserPanel(username=null) {
@@ -375,26 +444,30 @@ function updateUserPanel(username=null) {
 function switchRecipeView(area) {
     // Get current elements
     const currentRecipesButton = document.getElementById(`${currentRecipesSelected}-recipes-button`);
-    const currentRecipesArea = document.getElementById(`${currentRecipesSelected}-recipes-area`);
+    const currentRecipesArea = document.getElementById(`${currentRecipesSelected}-recipes-container`);
 
     // Get new elements
     const newRecipesButton = document.getElementById(`${area}-recipes-button`);
-    const newRecipesArea = document.getElementById(`${area}-recipes-area`);
+    const newRecipesArea = document.getElementById(`${area}-recipes-container`);
 
     // Remove selected class from current element
     currentRecipesButton.classList.remove('recipe-button-selected');
-    currentRecipesArea.classList.remove('recipe-area-selected');
+    currentRecipesArea.classList.remove('recipe-container-selected');
 
     // Add classes to new element
     newRecipesButton.classList.add('recipe-button-selected');
-    newRecipesArea.classList.add('recipe-area-selected');
+    newRecipesArea.classList.add('recipe-container-selected');
 
     currentRecipesSelected = area;
+
+    // Reset url parameters
+    url.searchParams.set('page', 1); window.history.replaceState(null, null, url);
+
+    // Load recipes
+    loadRecipes();
 }
 
 async function pickRandomRecipe() {
-    console.log("Picking random recipe");
-
     // Show loading message
     const randomRecipeContainer = document.getElementById('random-recipe-container');
     randomRecipeContainer.innerHTML = '';
@@ -402,8 +475,6 @@ async function pickRandomRecipe() {
 
     let responsePromise = await fetch('https://localhost:5001/api/get/random');
     let responseJson = JSON.parse(await responsePromise.text());
-
-    console.log(responseJson);
 
     if(responseJson['status'] == "failure") {
         console.error("Error retrieving a random recipe");
@@ -413,5 +484,16 @@ async function pickRandomRecipe() {
         let recipeId = responseJson['data']['rec_id'];
         let recipeName = responseJson['data']['recipe_name'];
         randomRecipeContainer.appendChild(createRandomRecipeLink(recipeId, recipeName));
+    }
+}
+
+function toggleAuthenticatedItems() {
+    // Show all authenticated-only elements
+    const authenticatedElements = document.getElementsByClassName('authenticated-only');
+    const displayType = (userInfo != undefined) ? 'inline-block' : 'none';
+
+
+    for(let i = 0; i < authenticatedElements.length; i++) {
+        authenticatedElements[i].style.display = displayType;
     }
 }

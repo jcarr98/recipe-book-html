@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Jean's Recipe Book</title>
+    <title>New Recipe - Jean's Recipe Book</title>
 
     <!-- Custom refs -->
     <link rel="stylesheet" href="./styles/shared.css">
+    <link rel="stylesheet" href="./styles/create.css">
     <!-- External refs -->
     <script src="https://kit.fontawesome.com/c7ff23f1ca.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dosis&display=swap" rel="stylesheet">
   </head>
-  <body>
+  <body onload="loadRecipe()">
     <header id="header">
       <div id="header-bar">
           <h1>Jeffrey Carr</h1>
@@ -24,7 +25,66 @@
       </div>
     </header>
 
-    <h1>Create Recipe Page</h1>
-    <button class="standard-button" onclick="window.location.replace('https://localhost:5500');">Back to main</button>
+    <div id="create-title" style="text-align: center;">
+      <h1>New Recipe</h1>
+    </div>
+
+    <main>
+      <section id="intro-section">
+        <h2>Recipe Info</h2>
+        <table id="intro-table">
+          <tr>
+            <td><label for="recipe-title">Recipe Title</label></td>
+            <td><input class="input input-wide" type="text" name="recipe-title" id="recipe-title"></td>
+          </tr>
+          <tr>
+            <td><label for="recipe-description">Recipe Description</label></td>
+            <td><textarea class="input input-wide input-tall" type="text" name="recipe-description" id="recipe-description"></textarea></td>
+          </tr>
+        </table>
+      </section>
+  
+      <section id="ingredients-section">
+        <h2>Recipe Ingredients</h2>
+        <table id="ingredients-table">
+          <tr>
+            <th>Ingredient Name</th>
+            <th>Amount</th>
+            <th>Prep</th>
+          </tr>
+          <tr>
+            <td><input class="input" id="ingredient-1-name" name="ingredient-1-name" type="text" data-required="true"></td>
+            <td><input class="input" id="ingredient-1-amount" name="ingredient-1-amount" type="text"></td>
+            <td><input class="input" id="ingredient-1-prep" name="ingredient-1-prep" type="text"></td>
+          </tr>
+        </table>
+  
+        <button class="secondary-button" onclick="addIngredientRow()">Add another ingredient</button>
+      </section>
+  
+      <section id="directions-section" style="margin-top: 3em;">
+        <h2>Recipe Directions</h2>
+        <table id="directions-table">
+          <tr>
+            <td>Step 1</td>
+            <td><textarea class="input input-wide input-medium" id="step-1" name="step-1"></textarea></td>
+          </tr>
+        </table>
+  
+        <button class="secondary-button" onclick="addDirectionRow()">Add another step</button>
+      </section>
+
+      <section id="submit">
+        <h2>Finish Up</h2>
+        <div id="buttons-container">
+          <button class="standard-button">Create Recipe</button>
+          <button class="secondary-button">Cancel</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="extra-space" style="height: 100px;"></div>
+
+    <script type="text/javascript" src="./js/create.js"></script>
   </body>
 </html>

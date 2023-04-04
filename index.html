@@ -55,10 +55,10 @@
                         <!-- SEARCH BODY -->
                         <div id="search-body" class="sidebar-item">
                             <h2>Search</h2>
-                            <input type="text" id="search-input" name="searchInput">
+                            <input class="input" id="search-input" type="search" name="searchInput">
                             <div style="display: inline-block">
                                 <button id="search-button" class="standard-button" onclick="search()">Search</button>
-                                <button id="search-reset-button" class="plain-button" onclick="resetSearch()">Clear</button>
+                                <button id="reset-button" class="secondary-button" onclick="document.getElementById('search-input').value = ''; search();">Reset</button>
                             </div>
                             <button id="more-filters-button" onclick="addFilter()">More Filters</button>
                             <div id="filter-display-area"></div>
@@ -92,11 +92,23 @@
                         <!-- Set style to 'none' initially so we only show this button to authenticated users -->
                         <button id="your-recipes-button" class="recipe-header-button authenticated-only" onclick="switchRecipeView('your')"><h2>Your Recipes</h2></button>
                     </div>
-                    <div id="all-recipes-area" class="grid-area recipe-area-selected">
-                        <h3>No recipes to show :(</h3>
+                    <div id="all-recipes-container" class="recipe-container recipe-container-selected">
+                        <div id="all-recipes-area" class="grid-area">
+                            <div id="all-loading-container">
+                                <img src="./images/loading.svg">
+                                <p>Loading all recipes...</p>
+                            </div>
+                        </div>
+                        <div id="all-pageination-container"></div>
                     </div>
-                    <div id="your-recipes-area" class="grid-area">
-                        <h3>No recipes to show :(</h3>
+                    <div id="your-recipes-container" class="recipe-container">
+                        <div id="your-recipes-area" class="grid-area">
+                            <div id="your-loading-container">
+                                <img src="./images/loading.svg">
+                                <p>Loading your recipes...</p>
+                            </div>
+                        </div>
+                        <div id="your-pageination-container"></div>
                     </div>
                 </div>
             </section>
