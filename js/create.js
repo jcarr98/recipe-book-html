@@ -79,8 +79,62 @@ function addDirectionRow() {
   directionsTable.appendChild(newRow);
 }
 
-function submitRecipe() {
-  // TODO
+async function submitRecipe() {
+  // Collect values
+  let title = document.getElementById('recipe-title').value;
+  let description = document.getElementById('recipe-description').value;
+  
+  let ingredients = [];
+  for(let i=0; i < totalIngredients; i++) {
+    let name = document.getElementById(`ingredient-${i+1}-name`).value;
+    let amount = document.getElementById(`ingredient-${i+1}-amount`).value;
+    let prep = document.getElementById(`ingredient-${i+1}-prep`).value;
+    // Check if there is actually any value
+    if(name.replace(" ", "").length == 0) {
+      console.error("Ingredient must have a name to be saved");
+      continue;
+    } else {
+      ingredients.push({
+        name: name,
+        amount: amount,
+        prep: prep
+      });
+    }
+  }
+
+  let directions = [];
+  for(let j=0; j < totalSteps; j++) {
+    let step = document.getElementById(`step-${j+1}`).value;
+    if(step.replace(" ", "").length == 0) {
+      continue;
+    } else {
+      directions.push({
+        step_num: j+1,
+        step: step
+      });
+    }
+  }
+
+  if(ingredients.length == 0 || directions.length == 0) {
+    console.error("There must be at least one ingredient and one direction");
+    return;
+  }
+
+  let sendRecipe = await fetch(`https://localhost:5001/api/post/create`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      recipe: {
+        title: title,
+        description: description,
+        ingredients: ingredients,
+        directions: directions
+      }
+    })
+  });
 }
 
 function cancelRecipe() {
