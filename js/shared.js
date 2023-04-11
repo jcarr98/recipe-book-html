@@ -2,7 +2,7 @@ async function checkUser() {
     // Check if user is authenticated in the backend
     let response, data;
     try {
-        response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/auth/check_authentication`, {credentials: 'include'});
+        response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/auth/check_authentication`, {credentials: 'include'});
         data = JSON.parse(await response.text());
     } catch (e) {
         displayMessage("error", "Cannot verify authentication. Error contacting server");

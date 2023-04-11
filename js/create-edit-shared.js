@@ -8,7 +8,7 @@ let ingredients = [];
 async function loadCategories() {
   let data;
   try {
-    let response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/get/categories`);
+    let response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/categories`);
     data = await JSON.parse(await response.text());
   } catch (e) {
     displayMessage("error", "Error connecting to server");
@@ -32,7 +32,7 @@ async function loadCategories() {
 async function loadIngredients() {
   let data;
   try {
-    let response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/get/ingredients`);
+    let response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/ingredients`);
     data = JSON.parse(await response.text());
   } catch (e) {
     displayMessage("error", "Error connecting to server");

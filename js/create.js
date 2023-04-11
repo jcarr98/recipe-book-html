@@ -74,7 +74,7 @@ async function submitRecipe() {
     return;
   }
 
-  let response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/post/create`, {
+  let response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/post/create`, {
     method: 'POST',
     credentials: 'include',
     headers: {
