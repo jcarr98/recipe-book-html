@@ -37,7 +37,7 @@ function displayMessages() {
 async function getCategories() {
     let responsePromise;
     try {
-        responsePromise = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/categories`);
+        responsePromise = await fetch(`https://localhost:5001/api/get/categories`);
     } catch (e) {
         displayMessage("error", "Error contacting server");
         return;
@@ -129,12 +129,8 @@ async function getRecipes() {
     // Default to page 1 and 10 per page
     let page = url.searchParams.get('page') == null ? 1 : url.searchParams.get('page');
     let limit = url.searchParams.get('perPage') == null ? 10 : url.searchParams.get('perPage');
-    let author = currentRecipesSelected == "your" ? userInfo : null;
 
-    let query = `https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/recipes?page=${page}&limit=${limit}`;
-    if(author != null) {
-        filteredAuthors.push(author);
-    }
+    let query = `https://localhost:5001/api/get/recipes?page=${page}&limit=${limit}`;
     if(filteredAuthors.length > 0) {
         query = query + "&authors=" + JSON.stringify(filteredAuthors);
     }
@@ -185,7 +181,7 @@ async function getAuthors() {
 
     let response;
     try {
-        response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/author_names?ids=${JSON.stringify(authorIds)}`);
+        response = await fetch(`https://localhost:5001/api/get/author_names?ids=${JSON.stringify(authorIds)}`);
     } catch (e) {
         displayMessage("error", "Error contacting server");
         return false;
@@ -247,7 +243,7 @@ async function getFavorites() {
 
     let responsePromise;
     try {
-        responsePromise = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/favorites`, {credentials: 'include'});
+        responsePromise = await fetch(`https://localhost:5001/api/get/favorites`, {credentials: 'include'});
     } catch (e) {
         displayMessage("error", "Cannot get favorites. Error contacting server");
         return;
@@ -337,7 +333,7 @@ async function search() {
 
     let responsePromise
     try {
-        responsePromise = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/search?search=${searchTerm}`);
+        responsePromise = await fetch(`https://localhost:5001/api/get/search?search=${searchTerm}`);
     } catch (e) {
         displayMessage("error", "Error contacting server");
         return;
@@ -401,7 +397,7 @@ async function addFavorite(id) {
     // Save favorite to database
     let favoriteResponse
     try {
-        favoriteResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/post/favorite_item`, {
+        favoriteResponse = await fetch(`https://localhost:5001/api/post/favorite_item`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -432,7 +428,7 @@ async function removeFavorite(id) {
     // First, try to remove from server since that is the most likely to fail
     let unfavoriteResponse;
     try {
-        unfavoriteResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/post/unfavorite_item`, {
+        unfavoriteResponse = await fetch(`https://localhost:5001/api/post/unfavorite_item`, {
             credentials: 'include',
             method: 'POST',
             headers: {
@@ -534,7 +530,7 @@ async function login() {
     // First, get CSRF and nonce from backend
     let tokensPromise;
     try {
-        tokensPromise = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/auth/tokens`, {credentials: 'include'});
+        tokensPromise = await fetch(`https://localhost:5001/auth/tokens`, {credentials: 'include'});
     } catch (e) {
         displayMessage("error", "Error contacting server");
         return;
@@ -546,7 +542,7 @@ async function login() {
     let client_id='310858652520-c86lkcpu4bm3hb6mi3v80vh8qsc1pada.apps.googleusercontent.com';
     let response_type='code';
     let scope=encodeURIComponent('openid profile email');
-    let redirect_uri=encodeURIComponent('https://www.recipe.jeffreycarr.dev/login', {credentials: 'include'});
+    let redirect_uri=encodeURIComponent('https://localhost:5500/login.html', {credentials: 'include'});
     let state=`${tokensJson['CSRF']}`;
     let nonce = `${tokensJson['nonce']}`;
 
@@ -557,7 +553,7 @@ async function login() {
 async function logout() {
     // Send destroy notification to backend
     try {
-        await fetch("https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/auth/logout", {credentials: 'include'});
+        await fetch("https://localhost:5001/auth/logout", {credentials: 'include'});
     } catch (e) {
         displayMessage("error", "Error contacting server");
         return;
@@ -600,7 +596,7 @@ function updateUserPanel(username=null) {
         createButton.classList.add('standard-button');
         createButton.innerText = 'Create New Recipe';
         createButton.style.marginBottom = '1em';
-        createButton.onclick = () => {window.location.replace('https://www.recipe-test.jeffreycarr.dev/create')};
+        createButton.onclick = () => {window.location.replace('https://localhost:5500/create.html')};
         userArea.appendChild(createButton);
 
         authButton.classList.add('plain-button');
@@ -613,6 +609,10 @@ function updateUserPanel(username=null) {
 }
 
 function switchRecipeView(area) {
+    filteredAuthors = [];
+    if(area == 'your') {
+        filteredAuthors.push(userInfo);
+    }
     // Remove selected class from current element
     document.getElementById(`${currentRecipesSelected}-recipes-button`).classList.remove('recipe-button-selected');
     document.getElementById(`${currentRecipesSelected}-recipes-container`).style.display = "none";
@@ -637,7 +637,7 @@ async function pickRandomRecipe() {
 
     let responsePromise;
     try {
-        responsePromise = await fetch('https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/random');
+        responsePromise = await fetch('https://localhost:5001/api/get/random');
     } catch (e) {
         displayMessage("error", "Error contacting server");
         return;
@@ -671,7 +671,7 @@ async function deleteRecipe(id) {
     document.getElementById(`${id}-delete-button-container`).innerHTML = '<i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>';
 
     // Send delete request to server
-    let serverResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/post/delete`, {
+    let serverResponse = await fetch(`https://localhost:5001/api/post/delete`, {
     method: 'POST',
     credentials: 'include',
     headers: {

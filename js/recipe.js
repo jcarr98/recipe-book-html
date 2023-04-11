@@ -63,6 +63,7 @@ function createVideo() {
 }
 
 async function loadRecipeInfo(id) {
+  console.log("Loading recipe info");
   // If user is authenticated, start checking if this recipe is favorited
   let favoritedPromise;
   if(userInfo != undefined) {
@@ -70,7 +71,7 @@ async function loadRecipeInfo(id) {
   }
 
   // Send fetch request to backend
-  let recipeResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/recipe_info?recipeId=${id}`);
+  let recipeResponse = await fetch(`https://localhost:5001/api/get/recipe_info?recipeId=${id}`);
   let recipeData = JSON.parse(await recipeResponse.text());
 
   if(recipeData['status'] == "success") {
@@ -84,7 +85,7 @@ async function loadRecipeInfo(id) {
   }
 
   // Get author name
-  let authorResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/author_names?ids=${JSON.stringify([recipeInfo['author']])}`);
+  let authorResponse = await fetch(`https://localhost:5001/api/get/author_names?ids=${JSON.stringify([recipeInfo['author']])}`);
   let authorData = JSON.parse(await authorResponse.text());
 
   // Update author info
@@ -134,7 +135,7 @@ function displayRecipe() {
     }
     // Add edit button
     if(userInfo['user_id'] == recipeInfo['author']) {
-      recipeTitle += `<a id="edit-button" class="plain-button title-button" href="https://www.recipe.jeffreycarr.dev/edit?recipe=${recipeInfo['rec_id']}&redirect=recipe"><i class="fa-solid fa-pencil"></i></a>`;
+      recipeTitle += `<a id="edit-button" class="plain-button title-button" href="https://localhost:5500/edit.html?recipe=${recipeInfo['rec_id']}&redirect=recipe"><i class="fa-solid fa-pencil"></i></a>`;
     }
   } else {
     recipeTitle =`${recipeInfo['recipe_name']}`;
@@ -160,7 +161,7 @@ function displayRecipe() {
 }
 
 async function loadRecipeIngredients(id) {
-  let data = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/recipe_ingredients?recipeId=${id}`);
+  let data = await fetch(`https://localhost:5001/api/get/recipe_ingredients?recipeId=${id}`);
   let dataJson = JSON.parse(await data.text());
 
   if(dataJson['status'] == "success") {
@@ -211,7 +212,7 @@ function displayIngredients() {
 }
 
 async function loadRecipeDirections(id) {
-  let data = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/recipe_directions?recipeId=${id}`);
+  let data = await fetch(`https://localhost:5001/api/get/recipe_directions?recipeId=${id}`);
   let dataJson = JSON.parse(await data.text());
 
   if(dataJson['status'] == "success") {
@@ -257,7 +258,7 @@ function displayRecipeDirections() {
 }
 
 async function checkIfFavorited(id) {
-  let data = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/get/is_favorited?recipeId=${id}`, { credentials: 'include' });
+  let data = await fetch(`https://localhost:5001/api/get/is_favorited?recipeId=${id}`, { credentials: 'include' });
 
   // Return the result
   return JSON.parse(await data.text());
@@ -271,7 +272,7 @@ async function favorite() {
   // Send request to backend
   let data;
   if(recipeInfo['favorited']) {
-    let result = await fetch('https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/post/unfavorite_item', {
+    let result = await fetch('https://localhost:5001/api/post/unfavorite_item', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -286,7 +287,7 @@ async function favorite() {
     data['oldIcon'] = '<i class="fav-button-icon fa-regular fa-heart fa-solid"></i>'
     data['newIcon'] = '<i class="fav-button-icon fa-regular fa-heart"></i>';
   } else {
-    let result = await fetch('https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app:8080/api/post/favorite_item', {
+    let result = await fetch('https://localhost:5001/api/post/favorite_item', {
       method: 'POST',
       credentials: 'include',
       headers: {

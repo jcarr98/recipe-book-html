@@ -68,7 +68,7 @@ function buildRecipeCard(recipe, favorited, isOwner) {
 
   const goButton = document.createElement('a');
   goButton.classList.add('standard-button');
-  goButton.href = `https://www.recipe.jeffreycarr.dev/recipe?id=${recipe['rec_id']}`;
+  goButton.href = `https://localhost:5500/recipe.html?id=${recipe['rec_id']}`;
   goButton.innerText = 'Check it out';
 
   const favButton = document.createElement('button');
