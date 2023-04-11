@@ -546,7 +546,7 @@ async function login() {
     let client_id='310858652520-c86lkcpu4bm3hb6mi3v80vh8qsc1pada.apps.googleusercontent.com';
     let response_type='code';
     let scope=encodeURIComponent('openid profile email');
-    let redirect_uri=encodeURIComponent('https://www.recipe-test.jeffreycarr.dev/login', {credentials: 'include'});
+    let redirect_uri=encodeURIComponent('https://www.recipe.jeffreycarr.dev/login', {credentials: 'include'});
     let state=`${tokensJson['CSRF']}`;
     let nonce = `${tokensJson['nonce']}`;
 
