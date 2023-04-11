@@ -68,7 +68,7 @@ function buildRecipeCard(recipe, favorited, isOwner) {
 
   const goButton = document.createElement('a');
   goButton.classList.add('standard-button');
-  goButton.href = `https://localhost:5500/recipe.html?id=${recipe['rec_id']}`;
+  goButton.href = `https://www.recipe.jeffreycarr.dev/recipe?id=${recipe['rec_id']}`;
   goButton.innerText = 'Check it out';
 
   const favButton = document.createElement('button');
@@ -115,7 +115,7 @@ function createFavoriteLI(id, recipeName) {
 
   const liAnchor = document.createElement('a');
   liAnchor.innerText = recipeName;
-  liAnchor.href = `https://localhost:5500/recipe.html?id=${id}`;
+  liAnchor.href = `https://www.recipe.jeffreycarr.dev/recipe?id=${id}`;
   liAnchor.classList.add('favorite-text');
 
   const deleteButton = document.createElement('button');
@@ -137,7 +137,7 @@ function createRandomRecipeLink(id, recipeName) {
   const anchor = document.createElement('a');
   anchor.innerHTML = recipeName;
   anchor.style.color = 'var(--font)';
-  anchor.href = `https://localhost:5500/recipe.html?id=${id}`;
+  anchor.href = `https://www.recipe.jeffreycarr.dev/recipe?id=${id}`;
 
   container.appendChild(anchor);
 

@@ -35,7 +35,7 @@ async function load() {
 async function loadRecipeInfo(id) {
   let recipeResponse;
   try {
-    recipeResponse = await fetch(`https://localhost:5001/api/get/recipe_info?recipeId=${id}`);
+    recipeResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/get/recipe_info?recipeId=${id}`);
   } catch (e) {
     displayMessage("error", "Error contacting server");
     document.getElementById('intro-loading').innerHTML = '<i class="error-icon fa-solid fa-triangle-exclamation"></i>';
@@ -64,7 +64,7 @@ async function loadRecipeInfo(id) {
 async function loadRecipeIngredients(id) {
   let ingredientsResponse;
   try {
-    ingredientsResponse = await fetch(`https://localhost:5001/api/get/recipe_ingredients?recipeId=${id}`);
+    ingredientsResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/get/recipe_ingredients?recipeId=${id}`);
   } catch (e) {
     displayMessage("error", "Error contacting server");
     document.getElementById('ingredients-loading').innerHTML = '<i class="error-icon fa-solid fa-triangle-exclamation"></i>';
@@ -98,7 +98,7 @@ async function loadRecipeIngredients(id) {
 async function loadRecipeDirections(id) {
   let directionsResponse;
   try {
-    directionsResponse = await fetch(`https://localhost:5001/api/get/recipe_directions?recipeId=${id}`);
+    directionsResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/get/recipe_directions?recipeId=${id}`);
   } catch (e) {
     displayMessage("error", "Error contacting server");
     document.getElementById('directions-loading').innerHTML = '<i class="error-icon fa-solid fa-triangle-exclamation"></i>';
@@ -192,7 +192,7 @@ async function submitRecipe() {
     return;
   }
 
-  let response = await fetch(`https://localhost:5001/api/post/update`, {
+  let response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/post/update`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -231,16 +231,16 @@ function confirmBack() {
   // Check if we have a redirect link
   if(redirect != undefined) {
     if(redirect == 'recipe') {
-      window.location.replace(`https://localhost:5500/recipe.html?id=${recipeId}`);
+      window.location.replace(`https://www.recipe.jeffreycarr.dev/recipe?id=${recipeId}`);
     }
     else if(redirect == 'index') {
-      window.location.replace(`https://localhost:5500/index.html`);
+      window.location.replace(`https://www.recipe.jeffreycarr.dev/index`);
     }
     // If we have a redirect we can't parse, just go back to index
     else {
-      window.location.replace(`https://localhost:5500/`)
+      window.location.replace(`https://www.recipe.jeffreycarr.dev/`)
     }
   } else {
-    window.location.replace(`https://localhost:5500/`);
+    window.location.replace(`https://www.recipe.jeffreycarr.dev/`);
   }
 }
