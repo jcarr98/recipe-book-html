@@ -1,0 +1,63 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 36px;
+}
+
+h1 button {
+  color: var(--font);
+  font-size: 36px;
+}
+
+h1 a {
+  color: var(--font);
+}
+
+section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 1em;
+}
+
+th {
+  color: var(--secondary);
+}
+
+td {
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--primary);
+  border-collapse: collapse;
+}
+td:nth-child(1) {
+  border-right: 1px solid var(--primary);
+  border-collapse: collapse;
+}
+td:nth-child(3) {
+  border-left: 1px solid var(--primary);
+  border-collapse: collapse;
+}
+
+.step-item {
+  padding-bottom: 1em;
+}
+
+.step-item div {
+  width: 100%;
+  text-align: start;
+}
+
+.step-num {
+  color: var(--secondary);
+  font-weight: bold;
+}
+
+.title-button {
+  margin-left: 10px;
+}

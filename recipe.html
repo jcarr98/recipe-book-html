@@ -3,10 +3,82 @@
   <head>
     <title>Jean's Recipe Book</title>
 
-    <link rel="stylesheet" href="./styles/index.css">
+    <!-- Custom stylesheets -->
+    <link rel="stylesheet" href="./styles/shared.css">
+    <link rel="stylesheet" href="./styles/recipe.css">
+
+    <!-- External refs -->
+    <script src="https://kit.fontawesome.com/c7ff23f1ca.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dosis&display=swap" rel="stylesheet">
   </head>
-  <body>
-    <h1>Viewing recipe</h1>
-    <button class="standard-button" onclick="window.location.replace('https://www.recipe-test.jeffreycarr.dev')">Back to main</button>
+  <body onload="load()">
+    <header id="header">
+      <div id="header-bar">
+          <h1>Jeffrey Carr</h1>
+          <div id="header-links">
+            <a href="https://www.jeffreycarr.dev">Main site</a>
+            <a href="/">Recipes</a>
+            <a href="https://www.bingo.jeffreycarr.dev">Bingo creator</a>
+          </div>
+      </div>
+      <div id="return-bar">
+          <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to recipes</a>
+      </div>
+    </header>
+
+    <section id="recipe-info">
+      <div class="loading-img" id="recipe-info-loading">
+        <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
+        <div>Loading...</div>
+      </div>
+      <div id="recipe-info-data" style="display:none">
+        <h1 id="recipe-title"></h1>
+
+        <p id="recipe-author">Author:</p>
+        <p id="recipe-description">Description:</p>
+        <div id="recipe-buttons">
+          <button id="keep-awake-button" class="standard-button" onclick="updateKeepAwake()"><i class="fa-solid fa-eye-slash"></i> Keep screen awake</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="ingredients-section">
+      <h2>Ingredients</h2>
+      <div class="loading-img" id="ingredients-loading">
+        <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
+        <div>Loading...</div>
+      </div>
+      <div id="ingredients-data" style="display: none;">
+        <div>
+          <table id="ingredients-table">
+            <tr>
+              <th>Amount</th>
+              <th>Ingredient</th>
+              <th>Prep</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="directions-section">
+      <h2>Directions</h2>
+      <div class="loading-img" id="directions-loading">
+        <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
+        <div>Loading...</div>
+      </div>
+      <div id="directions-data">
+        <div id="directions-area"></div>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="modal-area" class="message-modal-container"></div>
+
+    <!-- Keep awake video container -->
+    <div id="video-container"></div>
+
+    <script type="text/javascript" src="js/shared.js"></script>
+    <script type="text/javascript" src="./js/recipe.js"></script>
   </body>
 </html>

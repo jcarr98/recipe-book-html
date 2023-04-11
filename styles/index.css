@@ -1,63 +1,5 @@
-/* Define color variables for themeing in the future */
-:root {
-    --primary: #8ECAE6;
-    --secondary: #219EBC;
-    --tertiary: #023047;
-    --alternate: #FFB703;
-    --alternate2: #FB8500;
-    --font: #023047;
-}
-
-body {
-    margin: 0;
-    color: var(--font, black);
-    font-family: Dosis, sans-serif;
-}
-
-/*** HEADER PROPERTIES ***/
-#header {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    z-index: 1;
-}
-
-#header-bar {
-    height: 70px;
-    background-color: #8ECAE6;
-    border: 1px solid #219EBC;
-    font-size: 24px;
-    text-align: center;
-    vertical-align: middle;
-    line-height: 0px;
-}
-
-#links-bar {
-    position: relative;
-    top: -5px;
-    margin: 0 auto;
-    height: 50px;
-    width: 130px;
-    text-align: center;
-    border-radius: 5px;
-    background-color: #219EBC;
-    border: 1px solid #023047;
-    z-index: -1;
-}
-
-#links-bar i {
-    color: var(--font);
-    font-size: 24px;
-    margin: 15px;
-}
-
-#links-bar a {
-    margin: auto;
-    text-decoration: none;
-}
-
 /*** INTRO PROPERTIES ***/
-#intro {
+/* #intro {
     width: 100%;
     text-align: center;
 }
@@ -72,21 +14,76 @@ body {
     width: 55%;
     margin: auto;
     font-size: 20px;
+} */
+#intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    background-color: var(--font);
 }
+
+#intro-text {
+    height: 100%;
+    color: white;
+    animation: fadeIn 3s;
+}
+
+#intro h1 {
+    font-family: 'Bad Script', 'Brush Script MT', cursive;
+    font-size: 96px;
+    margin: 0.1em 0 0 0.5em;
+}
+
+#intro p {
+    width: 55%;
+    margin: auto;
+    font-size: 20px;
+}
+
+#intro-image {
+    display: block;
+    animation: fadeIn 3s;
+}
+#intro-image img {
+    max-height: 650px;
+    width: auto;
+    height: auto;
+    margin-left: 100px;
+    margin-top: 5px;
+}
+
+#triangle-topleft {
+    justify-self: flex-start;
+    align-self: flex-start;
+    width: 0;
+    height: 0;
+    border-top: 100px solid var(--alternate);
+    border-right: 100px solid transparent;
+}
+#triangle-bottomright {
+    justify-self: end;
+    align-self: flex-end;
+    width: 0;
+    height: 0;
+    border-bottom: 100px solid var(--alternate);
+    border-left: 100px solid transparent;
+  }
 
 /*** MAIN CONTENT LAYOUT PROPERTIES ***/
 #main-content-area {
     width: 100%;
-    /* height: 100%; */
 }
 
 #main-content-area section {
     margin: 2em 0 0 1em;
-    float: left;
 }
 
 /*** SIDEBAR PROPERTIES ***/
 #sidebar {
+    vertical-align: top;
+    display: inline-block;
     position: sticky;
     top: 100px;
     width: 25%;
@@ -145,19 +142,6 @@ body {
     display: flex;
 }
 
-#search-input {
-    height: 20px;
-    width: 75%;
-    margin-bottom: 1em;
-    border: 1px solid var(--alternate2);
-    border-radius: 8px;
-}
-#search-input:focus {
-    outline: none;
-    transform: translate(2.5px, 1.5px);
-    box-shadow: inset 2.5px 1.5px var(--alternate2);
-}
-
 #more-filters-button {
     margin-top: 1em;
     padding: 0;
@@ -179,11 +163,24 @@ body {
 
 #favorites-area {
     font-size: 20px;
+    margin: 0;
+    padding: 0;
 }
 
-#favorites-list li {
-    /* list-style-type: none; */
-    font-size: 20px;
+#favorites-area ul {
+    padding-left: 0;
+    margin: 0;
+    width: 100%;
+}
+
+#favorites-area li {
+    list-style-type: none;
+    border: 1px solid var(--tertiary);
+    width: 90%;
+    padding: 1em;
+    margin: 10px 0;
+    border-radius: 3px;
+    font-size: 15px;
 }
 
 .favorite-text {
@@ -206,13 +203,13 @@ body {
 
 /*** RECIPES AREA PROPERTIES ***/
 #recipes {
+    display: inline-block;
     width: 70%;
     margin: 0;
     padding: 0;
 }
 
 .grid-area {
-    display: none;
     width: 100%;
 }
 
@@ -242,7 +239,11 @@ body {
     border-bottom: 3px solid var(--font);
 }
 
-.recipe-area-selected {
+.recipe-container {
+    display: none;
+}
+
+.recipe-container-selected {
     display: block;
 }
 
@@ -253,12 +254,19 @@ body {
 }
 
 .recipe-card {
+    font-size: 16px;
     margin: auto;
     width: 100%;
 }
+.recipe-card a {
+    font-size: 14px;
+}
 
 .recipe-card-header {
-    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* vertical-align: middle; */
     padding: 1em;
     background-color: var(--tertiary);
     border: 3px solid var(--tertiary);
@@ -285,15 +293,62 @@ body {
     vertical-align: middle;
     padding: 1em;
     border: 3px solid var(--primary);
-    /* border-top: 3px solid var(--alternate); */
     border-top: none;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    /* background-color: var(--tertiary); */
-    /* color: white; */
 }
 
-.fav-button-icon {
+.recipe-card-footer div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.recipe-secondary-button-container {
+    margin: 100px 0;
+}
+
+#pageination-container {
+    margin: auto;
+    text-align: center;
+}
+
+.pageination-button {
+    color: var(--font);
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 2px;
+    text-decoration: none;
+    transition: background-color .3s;
+}
+
+.pageination-active {
+    border: 3px solid var(--alternate);
+    background-color: var(--tertiary);
+    color: white;
+}
+.pageination-button:hover:not(.pageination-active) {
+    cursor: pointer;
+    background-color: #ddd;
+}
+
+.edit-button-container {
+    margin-left: 15px;
+}
+.edit-button-container i {
+    color: white;
+}
+
+.delete-button-container {
+    margin-left: 10px;
+}
+.delete-button-container i {
+    color: var(--font);
+}
+
+.footer-button-icon {
+    color: var(--font);
     font-size: 2em;
     margin-left: 10px;
 }
@@ -303,30 +358,18 @@ body {
     display: none;
 }
 
-.standard-button {
-    margin: 0 0.5em;
-    padding: 0.5em 1em;
+.tag {
+    color: var(--font);
+    font-size: 16px;
+    padding: 0em 1em;
+    border: 1px solid black;
+    border-radius: 4px;
+    opacity: 1;
+    background-color: #fff;
+}
+.tag-category {
     background-color: var(--alternate);
-    border: 1px solid var(--alternate2);
-    border-radius: 5px;
-    box-shadow: 1px 2px var(--alternate2);
 }
-.standard-button:hover {
-    cursor: pointer;
-    box-shadow: 2px 3.5px var(--alternate2);
-    transform: translate(-1px, -1.5px);
-}
-.standard-button:active {
-    box-shadow: 0px 0px;
-    transform: translate(0px, 0px);
-}
-
-.plain-button {
-    margin: 0;
-    padding: 0;
-    background: none;
-    border: none;
-}
-.plain-button:hover {
-    cursor: pointer;
+.tag-author {
+    background-color: var(--alternate2);;
 }
