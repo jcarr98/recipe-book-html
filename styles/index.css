@@ -1,5 +1,5 @@
 /*** INTRO PROPERTIES ***/
-#intro {
+/* #intro {
     width: 100%;
     text-align: center;
 }
@@ -14,7 +14,62 @@
     width: 55%;
     margin: auto;
     font-size: 20px;
+} */
+#intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    background-color: var(--font);
 }
+
+#intro-text {
+    height: 100%;
+    color: white;
+    animation: fadeIn 3s;
+}
+
+#intro h1 {
+    font-family: 'Bad Script', 'Brush Script MT', cursive;
+    font-size: 96px;
+    margin: 0.1em 0 0 0.5em;
+}
+
+#intro p {
+    width: 55%;
+    margin: auto;
+    font-size: 20px;
+}
+
+#intro-image {
+    display: block;
+    animation: fadeIn 3s;
+}
+#intro-image img {
+    max-height: 650px;
+    width: auto;
+    height: auto;
+    margin-left: 100px;
+    margin-top: 5px;
+}
+
+#triangle-topleft {
+    justify-self: flex-start;
+    align-self: flex-start;
+    width: 0;
+    height: 0;
+    border-top: 100px solid var(--alternate);
+    border-right: 100px solid transparent;
+}
+#triangle-bottomright {
+    justify-self: end;
+    align-self: flex-end;
+    width: 0;
+    height: 0;
+    border-bottom: 100px solid var(--alternate);
+    border-left: 100px solid transparent;
+  }
 
 /*** MAIN CONTENT LAYOUT PROPERTIES ***/
 #main-content-area {
@@ -199,12 +254,19 @@
 }
 
 .recipe-card {
+    font-size: 16px;
     margin: auto;
     width: 100%;
 }
+.recipe-card a {
+    font-size: 14px;
+}
 
 .recipe-card-header {
-    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* vertical-align: middle; */
     padding: 1em;
     background-color: var(--tertiary);
     border: 3px solid var(--tertiary);
@@ -236,6 +298,17 @@
     border-bottom-right-radius: 10px;
 }
 
+.recipe-card-footer div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.recipe-secondary-button-container {
+    margin: 100px 0;
+}
+
 #pageination-container {
     margin: auto;
     text-align: center;
@@ -260,7 +333,22 @@
     background-color: #ddd;
 }
 
-.fav-button-icon {
+.edit-button-container {
+    margin-left: 15px;
+}
+.edit-button-container i {
+    color: white;
+}
+
+.delete-button-container {
+    margin-left: 10px;
+}
+.delete-button-container i {
+    color: var(--font);
+}
+
+.footer-button-icon {
+    color: var(--font);
     font-size: 2em;
     margin-left: 10px;
 }
@@ -268,4 +356,20 @@
 /*** MULTI USE ***/
 .authenticated-only {
     display: none;
+}
+
+.tag {
+    color: var(--font);
+    font-size: 16px;
+    padding: 0em 1em;
+    border: 1px solid black;
+    border-radius: 4px;
+    opacity: 1;
+    background-color: #fff;
+}
+.tag-category {
+    background-color: var(--alternate);
+}
+.tag-author {
+    background-color: var(--alternate2);;
 }

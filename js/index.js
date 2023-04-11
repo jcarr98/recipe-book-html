@@ -1,4 +1,5 @@
-let userInfo, categories, recipes, totalRecipes;
+let userInfo, categories = [], recipes = [], authors = [], totalRecipes = 0;
+let filteredCategories = [], filteredAuthors = [];
 // Favorites is List of recipes ids, favoriteNames is Object of id:names
 // Keep a separate list of just favorite ids because we use .includes a lot
 let favorites, favoritesNames;
@@ -7,6 +8,9 @@ let currentRecipesSelected = 'all';  // Defaults to showing all recipes
 const url = new URL(window.location.href);
 
 async function load() {
+    // Check for messages
+    displayMessages();
+
     // Get all our categories
     getCategories();
 
@@ -21,14 +25,41 @@ async function load() {
     });
 }
 
+function displayMessages() {
+    if(url.searchParams.get("success")) {
+        displayMessage("success", url.searchParams.get("success"));
+    }
+    if(url.searchParams.get("error")) {
+        displayMessage("error",  url.searchParams.get("error"));
+    }
+}
+
 async function getCategories() {
-    const responsePromise = await fetch(`https://localhost:5001/api/get/categories`);
+    let responsePromise;
+    try {
+        responsePromise = await fetch(`https://localhost:5001/api/get/categories`);
+    } catch (e) {
+        displayMessage("error", "Error contacting server");
+        return;
+    }
+    
     const responseJson = JSON.parse(await responsePromise.text());
 
     if(responseJson['status'] == "success") {
         categories = responseJson['data'];
     } else {
-        console.error("Error retrieving categories");
+        displayMessages("error", "Error loading categories");
+        return;
+    }
+
+    // Put categories in modal
+    let categoryTable = document.getElementById('category-filter-table');
+    for(let i=0; i < categories.length; i++) {
+        let tr = document.createElement('tr');
+        let categoryLabel = `<td>${categories[i]['name']}</td>`;
+        let categoryCheckbox = `<td><input type="checkbox" id=cat-${i} name=cat-${i} /></td>`;
+        tr.innerHTML = categoryLabel + categoryCheckbox;
+        categoryTable.appendChild(tr);
     }
 }
 
@@ -38,23 +69,45 @@ async function getCategories() {
  * all these functions multiple times. It is easier to just include one function call than remembering all functions are need calling
  */
 async function loadRecipes() {
-    await getRecipes();
-    await checkUser();
+    // Set area loading
+    let displayArea = document.getElementById(`${currentRecipesSelected}-recipes-container`);
+    let cardArea = document.getElementById(`${currentRecipesSelected}-recipes-area`);
+    let loadingContainer = document.getElementById('loading-container');
+    displayArea.style.display = "none";
+    loadingContainer.style.display = "block";
+
+    let recipesResult = await getRecipes();
+    let authorsResult = await getAuthors();
+    let userInfoRequest = await checkUser();
+
+    if(userInfoRequest['status'] == "success") {
+        // Save user info
+        userInfo = userInfoRequest['data'];
+        // Update user panel
+        updateUserPanel(userInfo['fname']);
+    }
+
     // To avoid querying the database on each recipe view change, check if we already have this data saved
     if(favorites == undefined) {
         await getFavorites();
     }
-    
-    // Build recipe cards
-    let cardArea;
-    let author = currentRecipesSelected == "your" ? userInfo['user_id'] : null;
-    if(author != null) {
-        cardArea = document.getElementById('your-recipes-area');
+
+    // Confirm loading success
+    if(!recipesResult) {
+        document.getElementById('loading-container').innerHTML = '<i class="error-icon fa-solid fa-triangle-exclamation"></i><p>Error</p>';
+        return;
     } else {
-        cardArea = document.getElementById('all-recipes-area');
+        // Clear card areas
+        document.getElementById('all-recipes-area').innerHTML = "";
+        document.getElementById('your-recipes-area').innerHTML = "";
+
+        // Show area
+        loadingContainer.style.display = "none";
+        displayArea.style.display = "block";
     }
 
-    cardArea.innerHTML = '';
+    // Build recipe cards
+    // let author = currentRecipesSelected == "your" ? userInfo['user_id'] : null;
 
     // If we have no recipes, display message
     if(recipes.length == 0) {
@@ -62,11 +115,13 @@ async function loadRecipes() {
     } else {
         for(let i = 0; i < recipes.length; i++) {
             let recipe = recipes[i];
-            let card = buildRecipeCard(recipe, (favorites.includes(recipe['rec_id'])));
+            let isOwner = (userInfo != undefined && userInfo['user_id'] == recipe['author'])
+            let card = buildRecipeCard(recipe, (favorites.includes(recipe['rec_id'])), isOwner);
             cardArea.appendChild(card);
         }
     }
 
+    showPageination();
     toggleAuthenticatedItems();
 }
 
@@ -75,25 +130,99 @@ async function getRecipes() {
     // Default to page 1 and 10 per page
     let page = url.searchParams.get('page') == null ? 1 : url.searchParams.get('page');
     let limit = url.searchParams.get('perPage') == null ? 10 : url.searchParams.get('perPage');
-    let author = currentRecipesSelected == "your" ? userInfo['user_id'] : null;
+    let author = currentRecipesSelected == "your" ? userInfo : null;
 
     let query = `https://localhost:5001/api/get/recipes?page=${page}&limit=${limit}`;
     if(author != null) {
-        query = query + "&author=" + author;
+        filteredAuthors.push(author);
+    }
+    if(filteredAuthors.length > 0) {
+        query = query + "&authors=" + JSON.stringify(filteredAuthors);
+    }
+    if(filteredCategories.length > 0) {
+        query += `&categories=${JSON.stringify(filteredCategories)}`;
     }
 
-    const responsePromise = await fetch(query);
+    let responsePromise;
+    try {
+        responsePromise = await fetch(query);
+    } catch (e) {
+        displayMessage("error", "Error contacting server RECIPES");
+        return false;
+    }
+
     let responseJson = JSON.parse(await responsePromise.text());
 
     if(responseJson['status'] == "success") {
         totalRecipes = responseJson['numRecipes']
         recipes = responseJson['data'];
     } else {
-        console.error("Error retrieving recipes");
-        return;
+        displayMessage("error", "Error retrieving recipes");
+        return false;
     }
 
-    showPageination();
+    return true;
+}
+
+async function getAuthors() {
+    // Iterate over each recipe and get the authors
+    let authorIds = [], recipeWithAuthorIndex = {};
+    for(let i=0; i < recipes.length; i++) {
+        let currentAuthor = recipes[i]['author'];
+        // If no author, just continue
+        if(currentAuthor == null) {
+            continue;
+        }
+        // If we haven't seen this author before, save their id
+        else if(!authorIds.includes(currentAuthor)) {
+            // Push id to array to be sent to server
+            authorIds.push(currentAuthor);
+            recipeWithAuthorIndex[currentAuthor] = [];
+            recipeWithAuthorIndex[currentAuthor].push(i);
+        } else {
+            recipeWithAuthorIndex[currentAuthor].push(i);
+        }
+    }
+
+    let response;
+    try {
+        response = await fetch(`https://localhost:5001/api/get/author_names?ids=${JSON.stringify(authorIds)}`);
+    } catch (e) {
+        displayMessage("error", "Error contacting server");
+        return false;
+    }
+
+    let data = JSON.parse(await response.text());
+    authors = [];
+    if(data['status'] != "success") {
+        displayMessage("error", "Error retrieving recipe authors");
+    } else {
+        authors = data['data'];
+    }
+
+    // Put authors in filter modal
+    let authorsTable = document.getElementById('author-filter-table');
+    authorsTable.innerHTML = `<tr><th>Author</th><th></th></tr>`;
+    for(let i=0; i < authors.length; i++) {
+        let tr = document.createElement('tr');
+        let authorLabel = `<td>${authors[i]['fname']} ${authors[i]['lname']}</td>`;
+        let authorCheckbox = `<td><input type="checkbox" id=author-${i} name=author-${i} /></td>`;
+        tr.innerHTML = authorLabel + authorCheckbox;
+        authorsTable.appendChild(tr);
+    }
+
+    // Save author names to recipes
+    for(let i=0; i < authors.length; i++) {
+        // Find recipes that this author wrote
+        let authorRecipes = recipeWithAuthorIndex[authors[i]['user_id']];
+        for(let j=0; j < authorRecipes.length; j++) {
+            // Save author name to recipe
+            recipes[authorRecipes[j]]['author_fname'] = authors[i]['fname'];
+            recipes[authorRecipes[j]]['author_lname'] = authors[i]['lname'];
+        }
+    }
+
+    return true;
 }
 
 function showPageination() {
@@ -110,23 +239,6 @@ function showPageination() {
     }
 }
 
-async function checkUser() {
-    // Check if user is authenticated in the backend
-    let response = await fetch(`https://localhost:5001/auth/check_authentication`, {credentials: 'include'});
-    let data = JSON.parse(await response.text());
-    
-    // Default page shows unauthenticated user, so don't change anything
-    if(!data['authenticated']) {
-        return;
-    }
-
-    // Save user info globally
-    userInfo = data['user'];
-
-    // Update user panel
-    updateUserPanel(userInfo['fname']);
-}
-
 async function getFavorites() {
     // Check if user is authenticated
     if(userInfo == undefined) {
@@ -134,12 +246,19 @@ async function getFavorites() {
         return;
     }
 
-    const responsePromise = await fetch(`https://localhost:5001/api/get/favorites`, {credentials: 'include'});
+    let responsePromise;
+    try {
+        responsePromise = await fetch(`https://localhost:5001/api/get/favorites`, {credentials: 'include'});
+    } catch (e) {
+        displayMessage("error", "Cannot get favorites. Error contacting server");
+        return;
+    }
+
     const responseJson = JSON.parse(await responsePromise.text());
 
     // Check status
     if(responseJson['status'] != "success") {
-        console.error("Error retrieving favorites");
+        displayMessage("error", "Error retrieving favorites");
         return;
     }
 
@@ -178,35 +297,62 @@ function switchSidebar(area) {
     currentSidebarSelected = area;
 }
 
-function addFilter() {
+function applyFilters() {
     filterArea = document.getElementById('filter-display-area');
-    i = filterArea.childElementCount;
+    filterArea.innerHTML = '';
 
-    // Create small filter
-    p = document.createElement('p');
-    p.innerText = 'Filter ' + i;
-    filterArea.appendChild(p);
+    // Create filter for each filtered author
+    for(let i=0; i < filteredAuthors.length; i++) {
+        div = document.createElement('div');
+        div.classList.add('tag');
+        div.classList.add('tag-author');
+        div.innerText = `Author: ${filteredAuthors[i]['fname']} ${filteredAuthors[i]['lname']}`;
+        filterArea.appendChild(div);
+    }
+    // Create filter for each filtered category
+    for(let i=0; i < filteredCategories.length; i++) {
+        div = document.createElement('div');
+        div.classList.add('tag');
+        div.classList.add('tag-category');
+        div.innerText = 'Category: ' + filteredCategories[i]['name'];
+        filterArea.appendChild(div);
+    }
+
+    loadRecipes();
+}
+
+function clearAllFilters() {
+    filteredAuthors = [];
+    filteredCategories = [];
+    applyFilters();
 }
 
 async function search() {
     searchTerm = document.getElementById('search-input').value;
 
     // Used for reset
-    if(searchTerm.replace(" ", "").length == 0) {
+    if(searchTerm.split(" ").join("").length == 0) {
         loadRecipes();
         return;
     }
 
-    let responsePromise = await fetch(`https://localhost:5001/api/get/search?search=${searchTerm}`);
+    let responsePromise
+    try {
+        responsePromise = await fetch(`https://localhost:5001/api/get/search?search=${searchTerm}`);
+    } catch (e) {
+        displayMessage("error", "Error contacting server");
+        return;
+    }
+    
     let responseJson = JSON.parse(await responsePromise.text());
 
     if(responseJson['status'] == "failure") {
-        console.error("Error retrieving search results");
+        displayMessage("error", "Error retrieving search results");
         return;
     }
 
     let searchResults = responseJson['data'];
-    const cardArea = document.getElementById('all-recipes-area');
+    const cardArea = document.getElementById('all-recipes-container');
     cardArea.innerHTML = '';
     for(let i=0; i < searchResults.length; i++) {
         let card = buildRecipeCard(searchResults[i]);
@@ -226,9 +372,12 @@ async function toggleItemFavoritism(id) {
     let result = favorites.includes(id) ? await removeFavorite(id) : await addFavorite(id);
     
     if(result['status'] == "success") {
-        updateFavoriteButton(id);
         createFavoritesList();
+    } else {
+        displayMessage("error", result['message']);
     }
+
+    updateFavoriteButton(id);
 }
 
 async function setFavoriteLoading(id) {
@@ -240,7 +389,7 @@ async function setFavoriteLoading(id) {
         // When the favorite item is on another page
         return;
     } else {
-        favoriteButton.innerHTML = '<img src="./images/loading.svg">';
+        favoriteButton.innerHTML = '<i class="fa-solid fa-spinner fast-spin fa-xl load-primary"></i>';
     }
 
     // WHAT IS THIS???
@@ -251,14 +400,20 @@ async function setFavoriteLoading(id) {
 
 async function addFavorite(id) {
     // Save favorite to database
-    let favoriteResponse = await fetch(`https://localhost:5001/api/post/favorite_item`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 'id': id })
-    });
+    let favoriteResponse
+    try {
+        favoriteResponse = await fetch(`https://localhost:5001/api/post/favorite_item`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'id': id })
+        });
+    } catch (e) {
+        return { status: "failure", message: "Error contacting server" };
+    }
+
     let favoriteJson = JSON.parse(await favoriteResponse.text());
 
     if(favoriteJson['status'] != "success") {
@@ -276,19 +431,24 @@ async function addFavorite(id) {
 
 async function removeFavorite(id) {
     // First, try to remove from server since that is the most likely to fail
-    let unfavoriteResponse = await fetch(`https://localhost:5001/api/post/unfavorite_item`, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 'id': id })
-    });
+    let unfavoriteResponse;
+    try {
+        unfavoriteResponse = await fetch(`https://localhost:5001/api/post/unfavorite_item`, {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'id': id })
+        });
+    } catch (e) {
+        return { status: "failure", message: "Error contacting server" };
+    }
+
     let unfavoriteJson = JSON.parse(await unfavoriteResponse.text());
 
     // Check for errors
     if(unfavoriteJson['status'] == 'failure') {
-        console.error("Error removing favorite");
         return { status: "failure", message: "Error removing favorite" };
     }
 
@@ -318,7 +478,7 @@ function updateFavoriteButton(id) {
 
     // Create new icon
     i = document.createElement('i');
-    i.classList.add('fav-button-icon');
+    i.classList.add('footer-button-icon');
     i.classList.add('fa-heart');
 
     // Check if item is already liked
@@ -373,7 +533,13 @@ function getRecipeName(id) {
 
 async function login() {
     // First, get CSRF and nonce from backend
-    let tokensPromise = await fetch(`https://localhost:5001/auth/tokens`, {credentials: 'include'});
+    let tokensPromise;
+    try {
+        tokensPromise = await fetch(`https://localhost:5001/auth/tokens`, {credentials: 'include'});
+    } catch (e) {
+        displayMessage("error", "Error contacting server");
+        return;
+    }
     let tokensJson = JSON.parse(await tokensPromise.text());
 
     // Write required fields for authentication request and encode necessary URI components
@@ -390,7 +556,12 @@ async function login() {
 
 async function logout() {
     // Send destroy notification to backend
-    await fetch("https://localhost:5001/auth/logout", {credentials: 'include'});
+    try {
+        await fetch("https://localhost:5001/auth/logout", {credentials: 'include'});
+    } catch (e) {
+        displayMessage("error", "Error contacting server");
+        return;
+    }
 
     // Remove all user info
     userInfo = undefined;
@@ -418,7 +589,7 @@ function updateUserPanel(username=null) {
     userArea.appendChild(greeting);
 
     // Create auth button
-    let authButton = document.createElement('button');
+    let authButton = document.createElement('a');
     if(username == null) {
         authButton.classList.add('standard-button');
         authButton.innerText = "Sign in with Google";
@@ -442,21 +613,12 @@ function updateUserPanel(username=null) {
 }
 
 function switchRecipeView(area) {
-    // Get current elements
-    const currentRecipesButton = document.getElementById(`${currentRecipesSelected}-recipes-button`);
-    const currentRecipesArea = document.getElementById(`${currentRecipesSelected}-recipes-container`);
-
-    // Get new elements
-    const newRecipesButton = document.getElementById(`${area}-recipes-button`);
-    const newRecipesArea = document.getElementById(`${area}-recipes-container`);
-
     // Remove selected class from current element
-    currentRecipesButton.classList.remove('recipe-button-selected');
-    currentRecipesArea.classList.remove('recipe-container-selected');
+    document.getElementById(`${currentRecipesSelected}-recipes-button`).classList.remove('recipe-button-selected');
+    document.getElementById(`${currentRecipesSelected}-recipes-container`).style.display = "none";
 
     // Add classes to new element
-    newRecipesButton.classList.add('recipe-button-selected');
-    newRecipesArea.classList.add('recipe-container-selected');
+    document.getElementById(`${area}-recipes-button`).classList.add('recipe-button-selected');
 
     currentRecipesSelected = area;
 
@@ -473,11 +635,17 @@ async function pickRandomRecipe() {
     randomRecipeContainer.innerHTML = '';
     randomRecipeContainer.innerText = "Gather ingredients...";
 
-    let responsePromise = await fetch('https://localhost:5001/api/get/random');
+    let responsePromise;
+    try {
+        responsePromise = await fetch('https://localhost:5001/api/get/random');
+    } catch (e) {
+        displayMessage("error", "Error contacting server");
+        return;
+    }
     let responseJson = JSON.parse(await responsePromise.text());
 
     if(responseJson['status'] == "failure") {
-        console.error("Error retrieving a random recipe");
+        displayMessage("error", "Error retrieving random recipe");
     } else {
         randomRecipeContainer.innerHTML = '';
         randomRecipeContainer.innerText = "And your chef has cooked up...";
@@ -496,4 +664,78 @@ function toggleAuthenticatedItems() {
     for(let i = 0; i < authenticatedElements.length; i++) {
         authenticatedElements[i].style.display = displayType;
     }
+}
+
+async function deleteRecipe(id) {
+    // Set trash to loading symbol
+    document.getElementById(`${id}-delete-button-container`).innerHTML = '<i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>';
+
+    // Send delete request to server
+    let serverResponse = await fetch(`https://localhost:5001/api/post/delete`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      recipe: id
+    })
+  });
+
+  let serverData = JSON.parse(await serverResponse.text());
+  
+  if(serverData['status'] == "success") {
+    displayMessage("success", "Recipe successfully deleted");
+    loadRecipes();
+  } else {
+    displayMessage("error", "Error deleting recipe");
+  }
+}
+
+function showFiltersModal() {
+    // Helper function
+    function isInArray(value, field, array) {
+        for(let i=0; i < array.length; i++) {
+            if(array[i][field] == value) {
+                return true;
+            }
+        }
+    
+        return false;
+    }
+
+    // Make sure checkboxes are up to date
+    for(let i=0; i < authors.length; i++) {
+        document.getElementById(`author-${i}`).checked = isInArray(authors[i]['id'], 'id', filteredAuthors);
+    }
+    for(let i=0; i < categories.length; i++) {
+        document.getElementById(`cat-${i}`).checked = isInArray(categories[i]['cat_id'], 'cat_id', filteredCategories);
+    }
+
+    // Show modal
+    document.getElementById('filter-modal').style.display = "flex";
+}
+
+function setCategoryFilters() {
+    // Get each author box that is checked
+    filteredAuthors = [];
+    for(let i=0; i < authors.length; i++) {
+        if(document.getElementById(`author-${i}`).checked) {
+            filteredAuthors.push(authors[i]);
+        }
+    }
+
+    // Get each category box that is checked
+    filteredCategories = [];
+    for(let i=0; i < categories.length; i++) {
+        if(document.getElementById(`cat-${i}`).checked) {
+            filteredCategories.push(categories[i]);
+        }
+    }
+
+    // Close modal
+    document.getElementById('filter-modal').style.display = "none";
+
+    // Apply filters
+    applyFilters();
 }

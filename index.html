@@ -4,6 +4,7 @@
         <title>Jean's Recipe Book</title>
 
         <!-- Internal stylesheets -->
+        <link href="styles/animations.css" rel="stylesheet">
         <link href="styles/shared.css" rel="stylesheet">
         <link href="styles/index.css" rel="stylesheet">
         <!-- External refs -->
@@ -22,11 +23,18 @@
             </div>
         </header>
         <section id="intro">
-            <h1>Jean's Recipe Book</h1>
-            <p>
-                Welcome to Jean's recipe book! My mom kept a binder of every recipe she found online that our family loved.
-                This website is a tribute to her in an attempt to give everyone the opportunity to explore the recipes.
-            </p>
+            <div id="triangle-topleft"></div>
+            <div id="intro-image">
+                <img src="./images/mom.jpg" />
+            </div>
+            <div id="intro-text">
+                <h1>Jean's Recipe Book</h1>
+                <p>
+                    Welcome to Jean's recipe book! My mom kept a binder of every recipe she found online that our family loved.
+                    This website is a tribute to her in an attempt to give everyone the opportunity to explore the recipes.
+                </p>
+            </div>
+            <div id="triangle-bottomright"></div>
         </section>
         <main id="main-content-area">
             <!-- Sidebar -->
@@ -55,13 +63,14 @@
                         <!-- SEARCH BODY -->
                         <div id="search-body" class="sidebar-item">
                             <h2>Search</h2>
-                            <input class="input" id="search-input" type="search" name="searchInput">
+                            <input id="search-input" type="search" name="searchInput">
                             <div style="display: inline-block">
                                 <button id="search-button" class="standard-button" onclick="search()">Search</button>
                                 <button id="reset-button" class="secondary-button" onclick="document.getElementById('search-input').value = ''; search();">Reset</button>
                             </div>
-                            <button id="more-filters-button" onclick="addFilter()">More Filters</button>
+                            <button id="more-filters-button" onclick="showFiltersModal()">More Filters</button>
                             <div id="filter-display-area"></div>
+                            <button id="clear-other-filters-button" class="secondary-button" onclick="clearAllFilters()">Clear All Additional Filters</button>
                         </div>
                         <!-- FAVORITES BODY -->
                         <div id="favs-body" class="sidebar-item">
@@ -92,22 +101,16 @@
                         <!-- Set style to 'none' initially so we only show this button to authenticated users -->
                         <button id="your-recipes-button" class="recipe-header-button authenticated-only" onclick="switchRecipeView('your')"><h2>Your Recipes</h2></button>
                     </div>
-                    <div id="all-recipes-container" class="recipe-container recipe-container-selected">
-                        <div id="all-recipes-area" class="grid-area">
-                            <div id="all-loading-container">
-                                <img src="./images/loading.svg">
-                                <p>Loading all recipes...</p>
-                            </div>
-                        </div>
+                    <div id="loading-container">
+                        <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
+                        <p>Loading recipes...</p>
+                    </div>
+                    <div id="all-recipes-container" class="recipe-container">
+                        <div id="all-recipes-area" class="grid-area"></div>
                         <div id="all-pageination-container"></div>
                     </div>
                     <div id="your-recipes-container" class="recipe-container">
-                        <div id="your-recipes-area" class="grid-area">
-                            <div id="your-loading-container">
-                                <img src="./images/loading.svg">
-                                <p>Loading your recipes...</p>
-                            </div>
-                        </div>
+                        <div id="your-recipes-area" class="grid-area"></div>
                         <div id="your-pageination-container"></div>
                     </div>
                 </div>
@@ -116,7 +119,32 @@
             <!-- <div id="testing" style="height: 10000px"></div> -->
         </main>
 
+        <!-- Modals -->
+        <div id="modal-area" class="message-modal-container"></div>
+        <div id="filter-modal" class="small-modal">
+            <div id="filter-modal-main">
+                <h1>Additional Filters</h1>
+                <table id="category-filter-table" class="filter-table">
+                    <tr>
+                        <th>Category</th>
+                        <th></th>
+                    </tr>
+                </table>
+                <table id="author-filter-table" class="filter-table">
+                    <tr>
+                        <th>Author</th>
+                        <th></th>
+                    </tr>
+                </table>
+                <div id="filter-buttons-container">
+                    <button id="confirm-filter-categories" class="standard-button" onclick="setCategoryFilters()">Add filters</button>
+                    <button id="cancel-filter-categories" class="secondary-button" onclick="document.getElementById('filter-modal').style.display = 'none';">Cancel</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Scripts -->
+        <script type="text/javascript" src="js/shared.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/buildElements.js"></script>
     </body>

@@ -8,6 +8,15 @@ h1 {
   font-size: 36px;
 }
 
+h1 button {
+  color: var(--font);
+  font-size: 36px;
+}
+
+h1 a {
+  color: var(--font);
+}
+
 section {
   width: 100%;
   display: flex;
@@ -47,4 +56,8 @@ td:nth-child(3) {
 .step-num {
   color: var(--secondary);
   font-weight: bold;
+}
+
+.title-button {
+  margin-left: 10px;
 }

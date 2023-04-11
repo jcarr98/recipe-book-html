@@ -1,0 +1,87 @@
+/* Because the create and edit pages are so similar, they can share a stylesheet */
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 21px;
+  color: var(--font);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+  border: 1px solid var(--font);
+  padding: 1em;
+}
+
+th {
+  color: var(--secondary);
+}
+
+td:nth-child(1) {
+  text-align: end;
+  padding-right: 1em;
+}
+
+#intro-table td:nth-child(2) {
+  text-align: left;
+}
+
+#ingredients-table td {
+  text-align: center;
+  padding-right: 1em;
+}
+#ingredients-table th {
+  padding-right: 1em;
+}
+
+#submit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2em 1em;
+  padding: 10px;
+  height: 50px;
+  width: 50%;
+}
+
+.input-container {
+  position: relative;
+  display: inline-block;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid var(--alternate2);
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 35px;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid var(--alternate2);
+}
+
+.autocomplete-items div:hover {
+  background-color: #e9e9e9;
+}
+
+.autocomplete-active {
+  background-color: dodgerblue !important;
+  color: #ffffff
+}
+
+.loading-area {
+  display: none;
+}

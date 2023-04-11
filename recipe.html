@@ -22,13 +22,13 @@
           </div>
       </div>
       <div id="return-bar">
-          <a href="/" style="color: var(--font)"><i class="fa-solid fa-arrow-left"></i> Back to recipes</a>
+          <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to recipes</a>
       </div>
     </header>
 
     <section id="recipe-info">
       <div class="loading-img" id="recipe-info-loading">
-        <img src="./images/loading.svg"> 
+        <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
         <div>Loading...</div>
       </div>
       <div id="recipe-info-data" style="display:none">
@@ -37,8 +37,7 @@
         <p id="recipe-author">Author:</p>
         <p id="recipe-description">Description:</p>
         <div id="recipe-buttons">
-          <button id="favorite-button" class="standard-button">Add to favorites</button>
-          <button class="plain-button" onclick="updateKeepAwake()"><i id="keep-awake-icon" class="fa-solid fa-eye-slash"></i> Keep screen awake</button>
+          <button id="keep-awake-button" class="standard-button" onclick="updateKeepAwake()"><i class="fa-solid fa-eye-slash"></i> Keep screen awake</button>
         </div>
       </div>
     </section>
@@ -46,7 +45,7 @@
     <section id="ingredients-section">
       <h2>Ingredients</h2>
       <div class="loading-img" id="ingredients-loading">
-        <img src="./images/loading.svg"> 
+        <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
         <div>Loading...</div>
       </div>
       <div id="ingredients-data" style="display: none;">
@@ -65,7 +64,7 @@
     <section id="directions-section">
       <h2>Directions</h2>
       <div class="loading-img" id="directions-loading">
-        <img src="./images/loading.svg"> 
+        <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
         <div>Loading...</div>
       </div>
       <div id="directions-data">
@@ -73,6 +72,13 @@
       </div>
     </section>
 
+    <!-- Modal -->
+    <div id="modal-area" class="message-modal-container"></div>
+
+    <!-- Keep awake video container -->
+    <div id="video-container"></div>
+
+    <script type="text/javascript" src="js/shared.js"></script>
     <script type="text/javascript" src="./js/recipe.js"></script>
   </body>
 </html>

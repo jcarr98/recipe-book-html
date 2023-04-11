@@ -5,12 +5,12 @@
 
     <!-- Custom refs -->
     <link rel="stylesheet" href="./styles/shared.css">
-    <link rel="stylesheet" href="./styles/create.css">
+    <link rel="stylesheet" href="./styles/create-edit.css">
     <!-- External refs -->
     <script src="https://kit.fontawesome.com/c7ff23f1ca.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dosis&display=swap" rel="stylesheet">
   </head>
-  <body onload="loadRecipe()">
+  <body onload="load()">
     <header id="header">
       <div id="header-bar">
           <h1>Jeffrey Carr</h1>
@@ -34,12 +34,16 @@
         <h2>Recipe Info</h2>
         <table id="intro-table">
           <tr>
-            <td><label for="recipe-title">Recipe Title</label></td>
+            <td><label for="recipe-title">Recipe Name*</label></td>
             <td><input class="input input-wide" type="text" name="recipe-title" id="recipe-title"></td>
           </tr>
           <tr>
             <td><label for="recipe-description">Recipe Description</label></td>
             <td><textarea class="input input-wide input-tall" type="text" name="recipe-description" id="recipe-description"></textarea></td>
+          </tr>
+          <tr>
+            <td><label for="category-input">Recipe Category*</label></td>
+            <td><div class="input-container"><input class="input input-wide" id="category-input" type="text" name="category-input"></div></td>
           </tr>
         </table>
       </section>
@@ -51,11 +55,14 @@
             <th>Ingredient Name*</th>
             <th>Amount</th>
             <th>Prep</th>
+            <th>Optional</th>
+            <th></th>  <!-- This is where the trash goes -->
           </tr>
           <tr>
-            <td><input class="input" id="ingredient-1-name" name="ingredient-1-name" type="text" data-required="true"></td>
+            <td><div class="input-container"><input class="input" id="ingredient-1-name" name="ingredient-1-name" type="text"></td>
             <td><input class="input" id="ingredient-1-amount" name="ingredient-1-amount" type="text"></td>
             <td><input class="input" id="ingredient-1-prep" name="ingredient-1-prep" type="text"></td>
+            <td><input class="checkbox" id="ingredient-1-optional" name="ingredient-1-optional" type="checkbox"></td>
           </tr>
         </table>
   
@@ -65,6 +72,11 @@
       <section id="directions-section" style="margin-top: 3em;">
         <h2>Recipe Directions</h2>
         <table id="directions-table">
+          <tr>
+            <th></th> <!-- Step num -->
+            <th></th> <!-- Step -->
+            <th></th> <!-- Trash -->
+          </tr>
           <tr>
             <td>Step 1</td>
             <td><textarea class="input input-wide input-medium" id="step-1" name="step-1"></textarea></td>
@@ -76,15 +88,30 @@
 
       <section id="submit">
         <h2>Finish Up</h2>
-        <div id="buttons-container">
-          <button class="standard-button" onclick="submitRecipe()">Create Recipe</button>
-          <button class="secondary-button">Cancel</button>
+        <div id="buttons-container" style="color: var(--font)">
+          <button id="submit-button" class="standard-button" onclick="submitRecipe()">Create Recipe</button>
+          <button class="secondary-button" onclick="showBackModal()">Cancel</button>
         </div>
       </section>
     </main>
 
     <div id="extra-space" style="height: 100px;"></div>
 
+    <!-- Modals -->
+    <div id="modal-area" class="message-modal-container"></div>
+    <div class="full-modal" id="back-modal">
+      <div>
+        <h1>Are you sure?</h1>
+        <p>Your progress will not be saved</p>
+        <div id="modal-button-container">
+          <button class="standard-button" onclick="window.location.replace('/')">Back to recipe list</button>
+          <button class="secondary-button" onclick="hideBackModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <script type="text/javascript" src="./js/create.js"></script>
+    <script type="text/javascript" src="js/create-edit-shared.js"></script>
+    <script type="text/javascript" src="js/shared.js"></script>
   </body>
 </html>

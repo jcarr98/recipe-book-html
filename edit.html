@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New Recipe - Jean's Recipe Book</title>
+
+    <!-- Custom refs -->
+    <link rel="stylesheet" href="./styles/shared.css">
+    <link rel="stylesheet" href="./styles/create-edit.css">
+    <!-- External refs -->
+    <script src="https://kit.fontawesome.com/c7ff23f1ca.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dosis&display=swap" rel="stylesheet">
+  </head>
+  <body onload="load()">
+    <header id="header">
+      <div id="header-bar">
+          <h1>Jeffrey Carr</h1>
+          <div id="header-links">
+            <a href="https://www.jeffreycarr.dev">Main site</a>
+            <a href="/">Recipes</a>
+            <a href="https://www.bingo.jeffreycarr.dev">Bingo creator</a>
+          </div>
+      </div>
+      <div id="return-bar">
+          <a href="/"><i class="fa-solid fa-arrow-left"></i> Back to recipes</a>
+      </div>
+    </header>
+
+    <div id="create-title" style="text-align: center;">
+      <h1>Editing Recipe</h1>
+    </div>
+
+    <main>
+      <section id="intro-section">
+        <h2>Recipe Info</h2>
+        <div id="intro-loading">
+          <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
+        </div>
+        <div class="loading-area" id="intro-loaded">
+          <table id="intro-table">
+            <tr>
+              <td><label for="recipe-title">Recipe Name*</label></td>
+              <td><input class="input-wide" type="text" name="recipe-title" id="recipe-title"></td>
+            </tr>
+            <tr>
+              <td><label for="recipe-description">Recipe Description</label></td>
+              <td><textarea class="input-wide input-tall" type="text" name="recipe-description" id="recipe-description"></textarea></td>
+            </tr>
+            <tr>
+              <td><label for="category-input">Recipe Category*</label></td>
+              <td><div class="input-container"><input class="input-wide" id="category-input" type="text" name="category-input"></div></td>
+            </tr>
+          </table>
+        </div>
+      </section>
+  
+      <section id="ingredients-section">
+        <h2>Recipe Ingredients</h2>
+        <div id="ingredients-loading">
+          <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
+        </div>
+        <div class="loading-area" id="ingredients-loaded">
+          <table id="ingredients-table">
+            <tr>
+              <th>Ingredient Name*</th>
+              <th>Amount</th>
+              <th>Prep</th>
+              <th>Optional</th>
+              <th></th>  <!-- This is where the trash goes -->
+            </tr>
+            <tr>
+              <td><div class="input-container"><input id="ingredient-1-name" name="ingredient-1-name" type="text"></td>
+              <td><input id="ingredient-1-amount" name="ingredient-1-amount" type="text"></td>
+              <td><input id="ingredient-1-prep" name="ingredient-1-prep" type="text"></td>
+              <td><input id="ingredient-1-optional" name="ingredient-1-optional" type="checkbox"></td>
+            </tr>
+          </table>
+    
+          <button class="secondary-button" onclick="addIngredientRow()">Add another ingredient</button>
+        </div>
+      </section>
+  
+      <section id="directions-section" style="margin-top: 3em;">
+        <h2>Recipe Directions</h2>
+        <div id="directions-loading">
+          <i class="fa-solid fa-spinner fast-spin fa-lg load-primary"></i>
+        </div>
+        <div class="loading-area" id="directions-loaded">
+          <table id="directions-table">
+            <tr>
+              <th></th> <!-- Step num -->
+              <th></th> <!-- Step -->
+              <th></th> <!-- Trash -->
+            </tr>
+            <tr>
+              <td>Step 1</td>
+              <td><textarea class="input input-wide input-medium" id="step-1" name="step-1"></textarea></td>
+            </tr>
+          </table>
+    
+          <button class="secondary-button" onclick="addDirectionRow()">Add another step</button>
+        </div>
+      </section>
+
+      <section id="submit">
+        <h2>Finish Up</h2>
+        <div id="buttons-container" style="color: var(--font)">
+          <button id="submit-button" class="standard-button" onclick="submitRecipe()">Update Recipe</button>
+          <button class="secondary-button" onclick="showBackModal()">Cancel</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="extra-space" style="height: 100px;"></div>
+
+    <!-- Modals -->
+    <div id="modal-area" class="message-modal-container"></div>
+    <div class="full-modal" id="back-modal">
+      <div>
+        <h1>Are you sure?</h1>
+        <p>Your progress will not be saved</p>
+        <div id="modal-button-container">
+          <button id="confirm-back" class="standard-button" onclick="confirmBack()">Back to recipe list</button>
+          <button class="secondary-button" onclick="hideBackModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="js/edit.js"></script>
+    <script type="text/javascript" src="js/create-edit-shared.js"></script>
+    <script type="text/javascript" src="js/shared.js"></script>
+  </body>
+</html>
