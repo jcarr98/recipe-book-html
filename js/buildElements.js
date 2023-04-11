@@ -115,7 +115,7 @@ function createFavoriteLI(id, recipeName) {
 
   const liAnchor = document.createElement('a');
   liAnchor.innerText = recipeName;
-  liAnchor.href = `https://www.recipe-test.jeffreycarr.dev/recipe?id=${id}`;
+  liAnchor.href = `https://localhost:5500/recipe.html?id=${id}`;
   liAnchor.classList.add('favorite-text');
 
   const deleteButton = document.createElement('button');
@@ -137,7 +137,7 @@ function createRandomRecipeLink(id, recipeName) {
   const anchor = document.createElement('a');
   anchor.innerHTML = recipeName;
   anchor.style.color = 'var(--font)';
-  anchor.href = `https://www.recipe-test.jeffreycarr.dev/recipe?id=${id}`;
+  anchor.href = `https://localhost:5500/recipe.html?id=${id}`;
 
   container.appendChild(anchor);
 
