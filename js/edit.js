@@ -35,7 +35,7 @@ async function load() {
 async function loadRecipeInfo(id) {
   let recipeResponse;
   try {
-    recipeResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/get/recipe_info?recipeId=${id}`);
+    recipeResponse = await fetch(`https://recipebookbackend-jeffreycarr98.b4a.run/api/get/recipe_info?recipeId=${id}`);
   } catch (e) {
     displayMessage("error", "Error contacting server");
     document.getElementById('intro-loading').innerHTML = '<i class="error-icon fa-solid fa-triangle-exclamation"></i>';
@@ -64,7 +64,7 @@ async function loadRecipeInfo(id) {
 async function loadRecipeIngredients(id) {
   let ingredientsResponse;
   try {
-    ingredientsResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/get/recipe_ingredients?recipeId=${id}`);
+    ingredientsResponse = await fetch(`https://recipebookbackend-jeffreycarr98.b4a.run/api/get/recipe_ingredients?recipeId=${id}`);
   } catch (e) {
     displayMessage("error", "Error contacting server");
     document.getElementById('ingredients-loading').innerHTML = '<i class="error-icon fa-solid fa-triangle-exclamation"></i>';
@@ -98,7 +98,7 @@ async function loadRecipeIngredients(id) {
 async function loadRecipeDirections(id) {
   let directionsResponse;
   try {
-    directionsResponse = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/get/recipe_directions?recipeId=${id}`);
+    directionsResponse = await fetch(`https://recipebookbackend-jeffreycarr98.b4a.run/api/get/recipe_directions?recipeId=${id}`);
   } catch (e) {
     displayMessage("error", "Error contacting server");
     document.getElementById('directions-loading').innerHTML = '<i class="error-icon fa-solid fa-triangle-exclamation"></i>';
@@ -192,7 +192,7 @@ async function submitRecipe() {
     return;
   }
 
-  let response = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/api/post/update`, {
+  let response = await fetch(`https://recipebookbackend-jeffreycarr98.b4a.run/api/post/update`, {
     method: 'POST',
     credentials: 'include',
     headers: {

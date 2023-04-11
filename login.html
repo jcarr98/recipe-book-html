@@ -28,7 +28,7 @@
         let scope = urlParams.get('scope');
 
         // Send response to server
-        let data = await fetch(`https://recipe-book-backend-v2-yal6zyrksa-uc.a.run.app/auth/google/verify_login?csrf=${csrf}&code=${code}&scope=${scope}`, {credentials: 'include'});
+        let data = await fetch(`https://recipebookbackend-jeffreycarr98.b4a.run/auth/google/verify_login?csrf=${csrf}&code=${code}&scope=${scope}`, {credentials: 'include'});
         let jsonData = JSON.parse(await data.text());
 
         if(jsonData['status'] == "success") {
