@@ -35,7 +35,7 @@ function buildRecipeCard(recipe, favorited, isOwner) {
 
     let editButton = document.createElement('button');
     editButton.classList.add('plain-button');
-    editButton.onclick = () => { window.location.replace(`/edit.html?recipe=${recipe['rec_id']}`) };
+    editButton.onclick = () => { window.location.replace(`/edit?recipe=${recipe['rec_id']}`) };
     editButton.innerHTML = '<i class="fa-solid fa-pencil"></i>';
     editButton.classList.add('card-header-button');
     
@@ -68,7 +68,7 @@ function buildRecipeCard(recipe, favorited, isOwner) {
 
   const goButton = document.createElement('a');
   goButton.classList.add('standard-button');
-  goButton.href = `https://localhost:5500/recipe.html?id=${recipe['rec_id']}`;
+  goButton.href = `https://www.recipe.jeffreycarr.dev/recipe?id=${recipe['rec_id']}`;
   goButton.innerText = 'Check it out';
 
   const favButton = document.createElement('button');
