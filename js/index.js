@@ -42,7 +42,6 @@ async function getCategories() {
         displayMessage("error", "Error contacting server");
         return;
     }
-    
     const responseJson = JSON.parse(await responsePromise.text());
 
     if(responseJson['status'] == "success") {
@@ -540,13 +539,14 @@ async function login() {
         displayMessage("error", "Error contacting server");
         return;
     }
+    
     let tokensJson = JSON.parse(await tokensPromise.text());
 
     // Write required fields for authentication request and encode necessary URI components
     let client_id='310858652520-c86lkcpu4bm3hb6mi3v80vh8qsc1pada.apps.googleusercontent.com';
     let response_type='code';
     let scope=encodeURIComponent('openid profile email');
-    let redirect_uri=encodeURIComponent('https://localhost:5500/login.html', {credentials: 'include'});
+    let redirect_uri=encodeURIComponent('https://www.recipe-test.jeffreycarr.dev/login', {credentials: 'include'});
     let state=`${tokensJson['CSRF']}`;
     let nonce = `${tokensJson['nonce']}`;
 
@@ -600,7 +600,7 @@ function updateUserPanel(username=null) {
         createButton.classList.add('standard-button');
         createButton.innerText = 'Create New Recipe';
         createButton.style.marginBottom = '1em';
-        createButton.onclick = () => {window.location.replace('https://localhost:5500/create.html')};
+        createButton.onclick = () => {window.location.replace('https://www.recipe-test.jeffreycarr.dev/create')};
         userArea.appendChild(createButton);
 
         authButton.classList.add('plain-button');
